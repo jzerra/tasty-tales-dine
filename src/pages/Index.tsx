@@ -2,226 +2,405 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, Clock, MapPin, Phone, Mail, Utensils, Heart, Award } from "lucide-react";
+import { Star, Clock, MapPin, Phone, Mail, Utensils, Heart, Award, Wine, ChefHat, Sparkles } from "lucide-react";
 import heroImage from "@/assets/nigerian-restaurant-hero.jpg";
 import afangSoupImg from "@/assets/afang-soup.jpg";
 import pepperSoupImg from "@/assets/pepper-soup.jpg";
 import meatPieImg from "@/assets/meat-pie.jpg";
+import egusiSoupImg from "@/assets/egusi-soup.jpg";
 
 const Index = () => {
   const featuredDishes = [
     {
       name: "Afang Soup",
-      description: "Traditional Nigerian soup with Afang leaves",
+      description: "Rich traditional soup with Afang leaves, stockfish, and assorted meat",
       price: 10000,
       image: afangSoupImg,
       rating: 4.8,
+      category: "Signature"
     },
     {
       name: "Goat Meat Pepper Soup",
-      description: "Spicy goat meat with traditional spices",
+      description: "Aromatic spicy broth with tender goat meat and traditional herbs",
       price: 8000,
       image: pepperSoupImg,
       rating: 4.9,
+      category: "Chewable"
     },
     {
       name: "Meat Pie",
-      description: "Flaky pastry with seasoned meat filling",
+      description: "Golden flaky pastry filled with seasoned minced meat and vegetables",
       price: 2000,
       image: meatPieImg,
       rating: 4.7,
+      category: "Pastries"
     },
   ];
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
+      {/* Hero Section - Full Width */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
           style={{ backgroundImage: `url(${heroImage})` }}
         >
-          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60"></div>
         </div>
-        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Welcome to
-            <span className="block bg-gradient-to-r from-gold to-warm bg-clip-text text-transparent">
-              Ug's Winery Lounge & Restaurant
+        <div className="relative z-10 text-center text-white max-w-5xl mx-auto px-6">
+          <div className="mb-6">
+            <Wine className="h-12 w-12 mx-auto mb-4 text-gold" />
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <div className="h-px w-12 bg-gold"></div>
+              <Sparkles className="h-4 w-4 text-gold" />
+              <div className="h-px w-12 bg-gold"></div>
+            </div>
+          </div>
+          
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
+            <span className="block mb-2">Ug's Winery Lounge</span>
+            <span className="block text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-gold via-warm to-gold bg-clip-text text-transparent font-medium">
+              & Restaurant
             </span>
           </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
-            Experience authentic Nigerian cuisine crafted with passion, served in an elegant 
-            winery lounge that celebrates our rich culinary heritage.
+          
+          <p className="text-lg md:text-xl lg:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed text-white/90">
+            Where Nigerian culinary artistry meets premium wine culture. Experience the finest 
+            traditional dishes paired with exceptional wines in Lagos's most elegant dining destination.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Link to="/menu">
-              <Button variant="hero" size="xl" className="min-w-[200px]">
+              <Button variant="hero" size="xl" className="min-w-[220px] font-semibold">
                 <Utensils className="h-5 w-5" />
-                View Our Menu
+                Explore Our Menu
               </Button>
             </Link>
             <Link to="/reservations">
-              <Button variant="outline" size="xl" className="min-w-[200px] bg-white/10 border-white/20 text-white hover:bg-white/20">
-                Make Reservation
+              <Button 
+                variant="outline" 
+                size="xl" 
+                className="min-w-[220px] bg-white/10 border-2 border-gold/50 text-white hover:bg-gold/20 hover:border-gold transition-all duration-300 font-semibold backdrop-blur-sm"
+              >
+                Reserve Your Table
               </Button>
             </Link>
           </div>
         </div>
+        
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/70 animate-bounce">
+          <div className="flex flex-col items-center">
+            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+              <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Featured Dishes */}
-      <section className="py-16 bg-gradient-warm">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Nigerian Dishes</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Discover our chef's signature Nigerian creations, prepared with authentic ingredients
-              and traditional techniques passed down through generations.
+      {/* About Us - Split Screen */}
+      <section className="py-20 bg-background overflow-hidden">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 text-primary">
+                <ChefHat className="h-6 w-6" />
+                <span className="text-sm uppercase tracking-wide font-semibold">Our Story</span>
+              </div>
+              
+              <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
+                Authentic Nigerian Flavors with a 
+                <span className="text-primary"> Modern Touch</span>
+              </h2>
+              
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Founded with a passion for preserving Nigerian culinary traditions, Ug's Winery Lounge 
+                represents the perfect marriage of authentic flavors and contemporary dining. Our master 
+                chef brings over two decades of expertise, sourcing the finest ingredients from across 
+                Nigeria to create dishes that honor our heritage.
+              </p>
+              
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Combined with our carefully curated wine selection featuring both international and 
+                African wines, we offer a dining experience that celebrates the richness of Nigerian 
+                culture in an atmosphere of refined elegance.
+              </p>
+              
+              <div className="flex items-center gap-6 pt-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">20+</div>
+                  <div className="text-sm text-muted-foreground">Years Experience</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">100+</div>
+                  <div className="text-sm text-muted-foreground">Premium Wines</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">50+</div>
+                  <div className="text-sm text-muted-foreground">Signature Dishes</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="relative">
+              <div className="aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl">
+                <img
+                  src={egusiSoupImg}
+                  alt="Chef preparing traditional Nigerian cuisine"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-br from-gold to-warm rounded-full flex items-center justify-center shadow-xl">
+                <Award className="h-12 w-12 text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Menu - Split Screen Reverse */}
+      <section className="py-20 bg-gradient-to-br from-muted/30 to-background">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
+            <div className="lg:order-2 space-y-6">
+              <div className="flex items-center gap-3 text-primary">
+                <Utensils className="h-6 w-6" />
+                <span className="text-sm uppercase tracking-wide font-semibold">Signature Menu</span>
+              </div>
+              
+              <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
+                Taste the 
+                <span className="text-primary"> Essence of Nigeria</span>
+              </h2>
+              
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                From our hearty traditional soups to delicate pastries and expertly prepared chewables, 
+                every dish tells a story of Nigerian culinary excellence. Each recipe has been perfected 
+                through generations, using authentic spices and cooking techniques.
+              </p>
+              
+              <div className="space-y-4">
+                {featuredDishes.map((dish, index) => (
+                  <div key={index} className="flex items-center gap-4 p-4 rounded-xl bg-card/50 backdrop-blur-sm hover:bg-card transition-all duration-300 group">
+                    <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                      <img src={dish.image} alt={dish.name} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-1">
+                        <h4 className="font-semibold group-hover:text-primary transition-colors">{dish.name}</h4>
+                        <span className="font-bold text-primary">₦{dish.price.toLocaleString()}</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{dish.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <Link to="/menu">
+                <Button variant="default" size="lg" className="mt-6">
+                  View Complete Menu
+                  <Utensils className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+            
+            <div className="lg:order-1 grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <div className="aspect-square overflow-hidden rounded-2xl">
+                  <img src={afangSoupImg} alt="Afang Soup" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                </div>
+                <div className="aspect-[4/3] overflow-hidden rounded-2xl">
+                  <img src={meatPieImg} alt="Meat Pie" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                </div>
+              </div>
+              <div className="space-y-4 pt-8">
+                <div className="aspect-[4/3] overflow-hidden rounded-2xl">
+                  <img src={pepperSoupImg} alt="Pepper Soup" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                </div>
+                <div className="aspect-square overflow-hidden rounded-2xl">
+                  <img src={egusiSoupImg} alt="Egusi Soup" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Experience Cards */}
+      <section className="py-20 bg-background">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <div className="h-px w-12 bg-primary"></div>
+              <Sparkles className="h-4 w-4 text-primary" />
+              <div className="h-px w-12 bg-primary"></div>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">The Ug's Experience</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Every visit to Ug's is more than a meal—it's a celebration of Nigerian culture, 
+              premium hospitality, and culinary excellence.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {featuredDishes.map((dish, index) => (
-              <Card key={index} className="group hover:shadow-warm transition-all duration-300 transform hover:scale-105">
-                <div className="relative">
-                  <img
-                    src={dish.image}
-                    alt={dish.name}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                  />
-                  <div className="absolute top-3 right-3 bg-background/90 backdrop-blur rounded-full px-2 py-1 flex items-center gap-1">
-                    <Star className="h-3 w-3 fill-gold text-gold" />
-                    <span className="text-xs font-medium">{dish.rating}</span>
-                  </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <Card className="group border-0 shadow-elegant hover:shadow-warm transition-all duration-500 hover:-translate-y-1 bg-gradient-to-br from-card to-card/80">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <ChefHat className="h-8 w-8 text-white" />
                 </div>
-                <CardHeader>
-                  <CardTitle className="group-hover:text-primary transition-colors">
-                    {dish.name}
-                  </CardTitle>
-                  <CardDescription>{dish.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-primary">₦{dish.price.toLocaleString()}</span>
-                    <Badge variant="outline" className="bg-gold/10 text-gold border-gold/20">
-                      Chef's Choice
-                    </Badge>
+                <h3 className="text-xl font-bold mb-4">Master Chef Excellence</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Our executive chef, trained in both traditional Nigerian cooking and international 
+                  culinary arts, ensures every dish meets the highest standards of authenticity and taste.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="group border-0 shadow-elegant hover:shadow-warm transition-all duration-500 hover:-translate-y-1 bg-gradient-to-br from-card to-card/80">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-warm to-gold rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Wine className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold mb-4">Premium Wine Curation</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Our sommelier has carefully selected wines from renowned vineyards worldwide, 
+                  including exclusive African wines that perfectly complement our Nigerian dishes.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="group border-0 shadow-elegant hover:shadow-warm transition-all duration-500 hover:-translate-y-1 bg-gradient-to-br from-card to-card/80">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-accent to-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Heart className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold mb-4">Elegant Atmosphere</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Our thoughtfully designed space blends contemporary elegance with warm Nigerian 
+                  hospitality, creating the perfect ambiance for any occasion.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact & Hours - Split Screen */}
+      <section className="py-20 bg-gradient-to-br from-muted/20 via-background to-muted/10">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
+            <div>
+              <div className="mb-8">
+                <div className="flex items-center gap-3 text-primary mb-4">
+                  <MapPin className="h-6 w-6" />
+                  <span className="text-sm uppercase tracking-wide font-semibold">Visit Us</span>
+                </div>
+                <h2 className="text-3xl lg:text-4xl font-bold mb-6">Experience Lagos's Finest Nigerian Dining</h2>
+                <p className="text-lg text-muted-foreground">
+                  Located in the heart of Victoria Island, we're easily accessible and ready to welcome 
+                  you to an unforgettable culinary journey.
+                </p>
+              </div>
+              
+              <Card className="border-0 shadow-elegant bg-card/80 backdrop-blur-sm">
+                <CardContent className="p-8">
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <MapPin className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-1">Location</h4>
+                        <p className="text-muted-foreground">123 Winery Lane, Victoria Island<br />Lagos, Nigeria</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Phone className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-1">Reservations</h4>
+                        <p className="text-muted-foreground">+234 801 234 5678</p>
+                        <p className="text-sm text-muted-foreground mt-1">Call daily 11:00 AM - 10:00 PM</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Mail className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-1">Email</h4>
+                        <p className="text-muted-foreground">reservations@ugswinery.com</p>
+                        <p className="text-sm text-muted-foreground mt-1">We respond within 2 hours</p>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Link to="/menu">
-              <Button variant="default" size="lg">
-                View Full Menu
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose Ug's Winery Lounge</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We're committed to providing an exceptional Nigerian dining experience with premium wine selections.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <Card className="text-center border-none shadow-elegant">
-              <CardContent className="pt-8">
-                <div className="w-16 h-16 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Expert Nigerian Chef</h3>
-                <p className="text-muted-foreground">
-                  Our head chef specializes in authentic Nigerian cuisine with 20+ years of experience.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="text-center border-none shadow-elegant">
-              <CardContent className="pt-8">
-                <div className="w-16 h-16 bg-gradient-to-r from-warm to-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Heart className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Authentic Ingredients</h3>
-                <p className="text-muted-foreground">
-                  We source traditional Nigerian ingredients to ensure authentic flavors in every dish.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="text-center border-none shadow-elegant">
-              <CardContent className="pt-8">
-                <div className="w-16 h-16 bg-gradient-to-r from-accent to-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Utensils className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Premium Wine Selection</h3>
-                <p className="text-muted-foreground">
-                  Our winery lounge offers an extensive collection of premium wines and spirits.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact & Hours */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
-                  Hours of Operation
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="font-medium">Monday - Thursday</span>
-                  <span>12:00 PM - 11:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Friday - Saturday</span>
-                  <span>12:00 PM - 12:00 AM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Sunday</span>
-                  <span>2:00 PM - 11:00 PM</span>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Contact Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">Address</p>
-                    <p className="text-muted-foreground">123 Winery Lane, Victoria Island, Lagos, Nigeria</p>
+            </div>
+            
+            <div>
+              <Card className="border-0 shadow-elegant bg-card/80 backdrop-blur-sm h-full">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-3 text-2xl">
+                    <Clock className="h-6 w-6 text-primary" />
+                    Operating Hours
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center p-4 rounded-xl bg-primary/5">
+                      <div>
+                        <div className="font-semibold">Monday - Thursday</div>
+                        <div className="text-sm text-muted-foreground">Lunch & Dinner Service</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-semibold">12:00 PM - 11:00 PM</div>
+                        <div className="text-sm text-gold">Kitchen closes 10:30 PM</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center p-4 rounded-xl bg-warm/10">
+                      <div>
+                        <div className="font-semibold">Friday - Saturday</div>
+                        <div className="text-sm text-muted-foreground">Extended Weekend Hours</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-semibold">12:00 PM - 12:00 AM</div>
+                        <div className="text-sm text-warm">Full menu until 11:30 PM</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center p-4 rounded-xl bg-gold/10">
+                      <div>
+                        <div className="font-semibold">Sunday</div>
+                        <div className="text-sm text-muted-foreground">Sunday Special Hours</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-semibold">2:00 PM - 11:00 PM</div>
+                        <div className="text-sm text-gold">Brunch available 2-5 PM</div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">Phone</p>
-                    <p className="text-muted-foreground">+234 801 234 5678</p>
+                  
+                  <div className="pt-4 border-t">
+                    <div className="text-center">
+                      <Link to="/reservations">
+                        <Button variant="default" size="lg" className="w-full">
+                          Make a Reservation
+                          <Phone className="h-4 w-4 ml-2" />
+                        </Button>
+                      </Link>
+                    </div>
+                    <p className="text-sm text-center text-muted-foreground mt-3">
+                      Reservations recommended, especially for weekend dining
+                    </p>
                   </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">Email</p>
-                    <p className="text-muted-foreground">info@ugswinery.com</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
