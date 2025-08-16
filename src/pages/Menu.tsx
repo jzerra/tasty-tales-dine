@@ -3,14 +3,28 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Star } from "lucide-react";
-import afangSoupImg from "@/assets/afang-soup.jpg";
-import egusiSoupImg from "@/assets/egusi-soup.jpg";
-import pepperSoupImg from "@/assets/pepper-soup.jpg";
-import meatPieImg from "@/assets/meat-pie.jpg";
-import grilledCatfishImg from "@/assets/grilled-catfish.jpg";
+import { useCart } from "@/context/CartContext";
+import { useToast } from "@/hooks/use-toast";
+import menuImages from "@/components/MenuImageEdit";
 
 const Menu = () => {
   const [activeCategory, setActiveCategory] = useState("all");
+  const { addToCart } = useCart();
+  const { toast } = useToast();
+
+  const handleAddToCart = (item: any) => {
+    addToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.image,
+      category: item.category,
+    });
+    toast({
+      title: "Added to cart!",
+      description: `${item.name} has been added to your cart.`,
+    });
+  };
 
   const categories = [
     { id: "all", name: "All Items" },
@@ -28,7 +42,7 @@ const Menu = () => {
       description: "Traditional Nigerian soup made with Afang leaves, meat and fish",
       price: 10000,
       category: "dishes",
-      image: afangSoupImg,
+      image: menuImages.afangSoup,
       rating: 4.8,
       popular: true,
     },
@@ -38,7 +52,7 @@ const Menu = () => {
       description: "Rich soup made with ground melon seeds and leafy vegetables",
       price: 10000,
       category: "dishes",
-      image: egusiSoupImg,
+      image: menuImages.egusiSoup,
       rating: 4.9,
       popular: true,
     },
@@ -48,7 +62,7 @@ const Menu = () => {
       description: "Fresh fish soup with native spices and vegetables",
       price: 10000,
       category: "dishes",
-      image: afangSoupImg,
+      image: menuImages.fisherManSoup,
       rating: 4.7,
       popular: false,
     },
@@ -58,7 +72,7 @@ const Menu = () => {
       description: "Nutritious soup with assorted vegetables and meat",
       price: 10000,
       category: "dishes",
-      image: egusiSoupImg,
+      image: menuImages.vegetableSoup,
       rating: 4.6,
       popular: false,
     },
@@ -68,7 +82,7 @@ const Menu = () => {
       description: "Palm nut soup with traditional spices and fresh fish",
       price: 10000,
       category: "dishes",
-      image: afangSoupImg,
+      image: menuImages.bangaSoup,
       rating: 4.8,
       popular: true,
     },
@@ -78,7 +92,7 @@ const Menu = () => {
       description: "Traditional Igbo soup with native spices and meat",
       price: 10000,
       category: "dishes",
-      image: egusiSoupImg,
+      image: menuImages.whiteSoup,
       rating: 4.7,
       popular: false,
     },
@@ -88,7 +102,7 @@ const Menu = () => {
       description: "Okra soup with fresh seafood and traditional spices",
       price: 10000,
       category: "dishes",
-      image: afangSoupImg,
+      image: menuImages.seafoodOkra,
       rating: 4.9,
       popular: true,
     },
@@ -99,7 +113,7 @@ const Menu = () => {
       description: "Spicy goat meat soup with traditional pepper soup spices",
       price: 8000,
       category: "chewable",
-      image: pepperSoupImg,
+      image: menuImages.goatMeatPepperSoup,
       rating: 4.8,
       popular: true,
     },
@@ -109,7 +123,7 @@ const Menu = () => {
       description: "Fresh catfish in aromatic pepper soup with local spices",
       price: 7500,
       category: "chewable",
-      image: grilledCatfishImg,
+      image: menuImages.catfishPepperSoup,
       rating: 4.9,
       popular: true,
     },
@@ -119,7 +133,7 @@ const Menu = () => {
       description: "Spicy cow skin delicacy with peppers and onions",
       price: 5000,
       category: "chewable",
-      image: pepperSoupImg,
+      image: menuImages.pepperedKpomo,
       rating: 4.6,
       popular: false,
     },
@@ -129,7 +143,7 @@ const Menu = () => {
       description: "Garden snails in rich tomato and pepper sauce",
       price: 6500,
       category: "chewable",
-      image: pepperSoupImg,
+      image: menuImages.saucedSnail,
       rating: 4.7,
       popular: false,
     },
@@ -139,7 +153,7 @@ const Menu = () => {
       description: "Traditional Igbo delicacy made with goat head",
       price: 12000,
       category: "chewable",
-      image: pepperSoupImg,
+      image: menuImages.isieEwu,
       rating: 4.8,
       popular: true,
     },
@@ -149,7 +163,7 @@ const Menu = () => {
       description: "Spicy cow foot delicacy with potash and spices",
       price: 8500,
       category: "chewable",
-      image: pepperSoupImg,
+      image: menuImages.nkwobi,
       rating: 4.7,
       popular: false,
     },
@@ -159,7 +173,7 @@ const Menu = () => {
       description: "Perfectly grilled chicken with local spices",
       price: 9000,
       category: "chewable",
-      image: grilledCatfishImg,
+      image: menuImages.grilledChicken,
       rating: 4.8,
       popular: true,
     },
@@ -169,7 +183,7 @@ const Menu = () => {
       description: "Fresh grilled fish with traditional seasonings",
       price: 8000,
       category: "chewable",
-      image: grilledCatfishImg,
+      image: menuImages.grilledFish,
       rating: 4.9,
       popular: true,
     },
@@ -179,7 +193,7 @@ const Menu = () => {
       description: "Traditional roasted plantain with groundnut",
       price: 3500,
       category: "chewable",
-      image: grilledCatfishImg,
+      image: menuImages.bolle,
       rating: 4.5,
       popular: false,
     },
@@ -190,7 +204,7 @@ const Menu = () => {
       description: "Flaky pastry filled with seasoned minced meat",
       price: 2000,
       category: "pastries",
-      image: meatPieImg,
+      image: menuImages.meatPie,
       rating: 4.7,
       popular: true,
     },
@@ -200,7 +214,7 @@ const Menu = () => {
       description: "Crunchy sweet fried pastry cubes",
       price: 1500,
       category: "pastries",
-      image: meatPieImg,
+      image: menuImages.chinChin,
       rating: 4.6,
       popular: false,
     },
@@ -210,7 +224,7 @@ const Menu = () => {
       description: "Crispy triangular pastry with spiced filling",
       price: 1800,
       category: "pastries",
-      image: meatPieImg,
+      image: menuImages.samosa,
       rating: 4.8,
       popular: true,
     },
@@ -220,7 +234,7 @@ const Menu = () => {
       description: "Crispy pastry filled with hard-boiled egg and spices",
       price: 2200,
       category: "pastries",
-      image: meatPieImg,
+      image: menuImages.eggRoll,
       rating: 4.7,
       popular: false,
     },
@@ -230,7 +244,7 @@ const Menu = () => {
       description: "Fluffy pancakes served with syrup",
       price: 2500,
       category: "pastries",
-      image: meatPieImg,
+      image: menuImages.panCake,
       rating: 4.5,
       popular: false,
     },
@@ -240,7 +254,7 @@ const Menu = () => {
       description: "Sweet glazed doughnuts, freshly made",
       price: 1800,
       category: "pastries",
-      image: meatPieImg,
+      image: menuImages.doughnuts,
       rating: 4.6,
       popular: true,
     },
@@ -250,7 +264,7 @@ const Menu = () => {
       description: "Flaky pastry filled with seasoned fish",
       price: 2200,
       category: "pastries",
-      image: meatPieImg,
+      image: menuImages.fishPie,
       rating: 4.8,
       popular: false,
     },
@@ -260,7 +274,7 @@ const Menu = () => {
       description: "Crispy rolls with vegetable and meat filling",
       price: 2000,
       category: "pastries",
-      image: meatPieImg,
+      image: menuImages.springRolls,
       rating: 4.7,
       popular: false,
     },
@@ -270,7 +284,7 @@ const Menu = () => {
       description: "Sweet deep-fried dough balls",
       price: 1500,
       category: "pastries",
-      image: meatPieImg,
+      image: menuImages.puffPuff,
       rating: 4.9,
       popular: true,
     },
@@ -280,7 +294,7 @@ const Menu = () => {
       description: "Moist cupcakes with creamy frosting",
       price: 2000,
       category: "pastries",
-      image: meatPieImg,
+      image: menuImages.cupCake,
       rating: 4.6,
       popular: false,
     },
@@ -291,7 +305,7 @@ const Menu = () => {
       description: "Premium red wine selection",
       price: 15000,
       category: "wines",
-      image: meatPieImg,
+      image: menuImages.redWine,
       rating: 4.8,
       popular: true,
     },
@@ -301,7 +315,7 @@ const Menu = () => {
       description: "Crisp and refreshing white wine",
       price: 14000,
       category: "wines",
-      image: meatPieImg,
+      image: menuImages.whiteWine,
       rating: 4.7,
       popular: false,
     },
@@ -311,7 +325,7 @@ const Menu = () => {
       description: "Premium whiskey selection",
       price: 25000,
       category: "wines",
-      image: meatPieImg,
+      image: menuImages.whiskey,
       rating: 4.9,
       popular: true,
     },
@@ -321,7 +335,7 @@ const Menu = () => {
       description: "Premium vodka brands available",
       price: 20000,
       category: "wines",
-      image: meatPieImg,
+      image: menuImages.vodka,
       rating: 4.6,
       popular: false,
     },
@@ -388,7 +402,12 @@ const Menu = () => {
               <CardContent>
                 <div className="flex justify-between items-center">
                   <span className="text-2xl font-bold text-primary">₦{item.price.toLocaleString()}</span>
-                  <Button variant="hero" size="sm" className="group-hover:scale-110 transition-transform">
+                  <Button 
+                    variant="hero" 
+                    size="sm" 
+                    className="group-hover:scale-110 transition-transform"
+                    onClick={() => handleAddToCart(item)}
+                  >
                     <Plus className="h-4 w-4" />
                     Add to Cart
                   </Button>

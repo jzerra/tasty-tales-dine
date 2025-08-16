@@ -6,26 +6,51 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { CreditCard, Truck, MapPin, Clock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Clock, MapPin, CreditCard, Truck, ShoppingBag } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 const Checkout = () => {
   const [orderType, setOrderType] = useState("delivery");
   const [paymentMethod, setPaymentMethod] = useState("card");
+  const { state: cartState, clearCart } = useCart();
+  const { toast } = useToast();
 
-  const cartItems = [
-    { id: 1, name: "Grilled Atlantic Salmon", price: 28.99, quantity: 1 },
-    { id: 2, name: "Truffle Pasta Carbonara", price: 24.99, quantity: 1 },
-  ];
-
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const deliveryFee = orderType === "delivery" ? 4.99 : 0;
-  const tax = (subtotal + deliveryFee) * 0.08;
+  const subtotal = cartState.total;
+  const deliveryFee = orderType === "delivery" ? 2000 : 0;
+  const tax = Math.round(subtotal * 0.075); // 7.5% VAT
   const total = subtotal + deliveryFee + tax;
+
+  const handlePlaceOrder = () => {
+    // Simulate order placement
+    toast({
+      title: "Order placed successfully!",
+      description: "You will receive a confirmation email shortly.",
+    });
+    clearCart();
+  };
+
+  if (cartState.items.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center">
+        <div className="text-center">
+          <ShoppingBag className="h-24 w-24 text-muted-foreground mx-auto mb-6" />
+          <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
+          <p className="text-muted-foreground mb-8">Add some items from our menu to get started.</p>
+          <Link to="/menu">
+            <Button>Browse Menu</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold mb-8 text-center">Checkout</h1>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -81,7 +106,7 @@ const Checkout = () => {
                   </div>
                   <div>
                     <Label htmlFor="phone">Phone Number</Label>
-                    <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" />
+                    <Input id="phone" type="tel" placeholder="+234 801 234 5678" />
                   </div>
                 </CardContent>
               </Card>
@@ -95,21 +120,21 @@ const Checkout = () => {
                   <CardContent className="space-y-4">
                     <div>
                       <Label htmlFor="address">Street Address</Label>
-                      <Input id="address" placeholder="123 Main St" />
+                      <Input id="address" placeholder="123 Winery Lane" />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="city">City</Label>
-                        <Input id="city" placeholder="New York" />
+                        <Input id="city" placeholder="Lagos" />
                       </div>
                       <div>
-                        <Label htmlFor="zip">ZIP Code</Label>
-                        <Input id="zip" placeholder="10001" />
+                        <Label htmlFor="state">State</Label>
+                        <Input id="state" placeholder="Lagos State" />
                       </div>
                     </div>
                     <div>
                       <Label htmlFor="instructions">Delivery Instructions (Optional)</Label>
-                      <Textarea id="instructions" placeholder="Ring doorbell, leave at door, etc." />
+                      <Textarea id="instructions" placeholder="Ring doorbell, leave at gate, etc." />
                     </div>
                   </CardContent>
                 </Card>
@@ -130,8 +155,8 @@ const Checkout = () => {
                       <Label htmlFor="card">Credit/Debit Card</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="paypal" id="paypal" />
-                      <Label htmlFor="paypal">PayPal</Label>
+                      <RadioGroupItem value="bank" id="bank" />
+                      <Label htmlFor="bank">Bank Transfer</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="cash" id="cash" />
@@ -174,13 +199,20 @@ const Checkout = () => {
                 <CardContent className="space-y-4">
                   {/* Cart Items */}
                   <div className="space-y-3">
-                    {cartItems.map((item) => (
-                      <div key={item.id} className="flex justify-between items-center">
-                        <div>
-                          <p className="font-medium">{item.name}</p>
-                          <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                    {cartState.items.map((item) => (
+                      <div key={item.id} className="flex justify-between items-center py-3">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-12 h-12 rounded-lg object-cover"
+                          />
+                          <div>
+                            <h4 className="font-semibold text-sm">{item.name}</h4>
+                            <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
+                          </div>
                         </div>
-                        <p className="font-medium">${item.price.toFixed(2)}</p>
+                        <p className="font-semibold">₦{(item.price * item.quantity).toLocaleString()}</p>
                       </div>
                     ))}
                   </div>
@@ -191,27 +223,27 @@ const Checkout = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Subtotal</span>
-                      <span>${subtotal.toFixed(2)}</span>
+                      <span>₦{subtotal.toLocaleString()}</span>
                     </div>
                     {orderType === "delivery" && (
                       <div className="flex justify-between">
                         <span>Delivery Fee</span>
-                        <span>${deliveryFee.toFixed(2)}</span>
+                        <span>₦{deliveryFee.toLocaleString()}</span>
                       </div>
                     )}
                     <div className="flex justify-between">
-                      <span>Tax</span>
-                      <span>${tax.toFixed(2)}</span>
+                      <span>VAT (7.5%)</span>
+                      <span>₦{tax.toLocaleString()}</span>
                     </div>
                     <Separator />
                     <div className="flex justify-between text-lg font-bold">
                       <span>Total</span>
-                      <span>${total.toFixed(2)}</span>
+                      <span>₦{total.toLocaleString()}</span>
                     </div>
                   </div>
 
-                  <Button variant="hero" size="lg" className="w-full">
-                    Place Order
+                  <Button className="w-full" size="lg" onClick={handlePlaceOrder}>
+                    Place Order - ₦{total.toLocaleString()}
                   </Button>
 
                   <p className="text-xs text-muted-foreground text-center">

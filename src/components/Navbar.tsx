@@ -2,10 +2,13 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useCart } from "@/context/CartContext";
+import { CartDrawer } from "./CartDrawer";
 
 const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { state } = useCart();
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -47,10 +50,17 @@ const Navbar = () => {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              <ShoppingCart className="h-4 w-4" />
-              <span className="ml-2">Cart (2)</span>
-            </Button>
+            <CartDrawer>
+              <Button variant="ghost" size="sm" className="relative">
+                <ShoppingCart className="h-4 w-4" />
+                <span className="ml-2">Cart ({state.itemCount})</span>
+                {state.itemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {state.itemCount}
+                  </span>
+                )}
+              </Button>
+            </CartDrawer>
             <Button variant="outline" size="sm">
               <User className="h-4 w-4" />
               <span className="ml-2">Login</span>
@@ -93,10 +103,17 @@ const Navbar = () => {
                 </Link>
               ))}
               <div className="flex flex-col space-y-2 pt-4">
-                <Button variant="ghost" size="sm" className="justify-start">
-                  <ShoppingCart className="h-4 w-4" />
-                  <span className="ml-2">Cart (2)</span>
-                </Button>
+                <CartDrawer>
+                  <Button variant="ghost" size="sm" className="justify-start relative">
+                    <ShoppingCart className="h-4 w-4" />
+                    <span className="ml-2">Cart ({state.itemCount})</span>
+                    {state.itemCount > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {state.itemCount}
+                      </span>
+                    )}
+                  </Button>
+                </CartDrawer>
                 <Button variant="outline" size="sm" className="justify-start">
                   <User className="h-4 w-4" />
                   <span className="ml-2">Login</span>
