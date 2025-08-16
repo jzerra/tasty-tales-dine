@@ -50,7 +50,7 @@ const Index = () => {
         <div className="relative z-10 text-center text-white max-w-5xl mx-auto px-6">
           <div className="mb-6">
             <img 
-              src="/lovable-uploads/f17be4dc-6003-460d-b4ef-8f4bf165fdc1.png" 
+              src="/lovable-uploads/f9c980d7-6af4-44cc-a86c-ecd1f7cc4926.png" 
               alt="Ug's Winery Lounge & Restaurant Logo" 
               className="w-24 h-24 mx-auto mb-6 object-contain filter brightness-110"
             />

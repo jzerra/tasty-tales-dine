@@ -21,7 +21,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
             <img 
-              src="/lovable-uploads/f17be4dc-6003-460d-b4ef-8f4bf165fdc1.png" 
+              src="/lovable-uploads/f9c980d7-6af4-44cc-a86c-ecd1f7cc4926.png" 
               alt="Ug's Winery Lounge & Restaurant Logo" 
               className="w-10 h-10 object-contain"
             />
