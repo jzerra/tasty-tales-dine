@@ -19,9 +19,13 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-full"></div>
-            <span className="text-xl font-bold text-foreground">Ug's Winery Lounge</span>
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src="/lovable-uploads/f17be4dc-6003-460d-b4ef-8f4bf165fdc1.png" 
+              alt="Ug's Winery Lounge & Restaurant Logo" 
+              className="w-10 h-10 object-contain"
+            />
+            <span className="text-xl font-bold text-foreground hidden sm:block">Ug's Winery Lounge</span>
           </Link>
 
           {/* Desktop Navigation */}

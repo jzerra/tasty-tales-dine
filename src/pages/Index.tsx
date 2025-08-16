@@ -49,7 +49,11 @@ const Index = () => {
         </div>
         <div className="relative z-10 text-center text-white max-w-5xl mx-auto px-6">
           <div className="mb-6">
-            <Wine className="h-12 w-12 mx-auto mb-4 text-gold" />
+            <img 
+              src="/lovable-uploads/f17be4dc-6003-460d-b4ef-8f4bf165fdc1.png" 
+              alt="Ug's Winery Lounge & Restaurant Logo" 
+              className="w-24 h-24 mx-auto mb-6 object-contain filter brightness-110"
+            />
             <div className="flex items-center justify-center gap-2 mb-6">
               <div className="h-px w-12 bg-gold"></div>
               <Sparkles className="h-4 w-4 text-gold" />
