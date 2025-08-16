@@ -40,13 +40,13 @@ import grilledCatfishImg from "@/assets/grilled-catfish.jpg";
 // MENU IMAGE EXPORTS
 export const menuImages = {
   // Dishes
-  afangSoup: afangSoupImg,
+  afangSoup: "/lovable-uploads/b50c7ee7-fe5d-40dc-b75c-fa32d5a99d36.png",
   egusiSoup: egusiSoupImg,
-  fisherManSoup: afangSoupImg, // Replace with actual fisher soup image
-  vegetableSoup: egusiSoupImg, // Replace with actual vegetable soup image
+  fisherManSoup: "/lovable-uploads/1a9ea0f3-8d1e-4cf9-afff-d767903a650c.png",
+  vegetableSoup: "/lovable-uploads/49a1dc0d-6042-47ea-8e6a-12188b11a478.png",
   bangaSoup: afangSoupImg, // Replace with actual banga soup image
-  whiteSoup: egusiSoupImg, // Replace with actual white soup image
-  seafoodOkra: afangSoupImg, // Replace with actual seafood okra image
+  whiteSoup: "/lovable-uploads/e16e4339-8f2c-446d-9d01-1c24e2063258.png",
+  seafoodOkra: "/lovable-uploads/59043c54-7a35-4ca8-b935-59329723f552.png",
 
   // Chewable  
   goatMeatPepperSoup: pepperSoupImg, // Replace with actual goat meat image
