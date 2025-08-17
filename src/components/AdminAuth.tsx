@@ -16,8 +16,9 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const { user, signIn, loading: authLoading } = useAuth();
+  const { user, signIn, signUp, loading: authLoading } = useAuth();
   const { toast } = useToast();
 
   // Check if the current user is an admin
@@ -51,30 +52,71 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
     checkAdminRole();
   }, [user]);
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const ensureProfile = async (userId: string, userEmail: string) => {
+    try {
+      const { data: existing, error: selErr } = await supabase
+        .from('profiles')
+        .select('id, role')
+        .eq('user_id', userId)
+        .single();
+
+      if (selErr) {
+        // No profile yet, create one. Make the demo email an admin.
+        await supabase.from('profiles').insert({
+          user_id: userId,
+          role: userEmail === 'admin@restaurant.com' ? 'admin' : 'customer',
+        });
+      }
+    } catch (e) {
+      console.error('ensureProfile error', e);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { error } = await signIn(email, password);
-      
-      if (error) {
-        toast({
-          title: "Authentication failed",
-          description: error.message,
-          variant: "destructive"
-        });
+      if (isSignUp) {
+        const { data, error } = await signUp(email, password);
+        if (error) {
+          toast({
+            title: 'Sign up failed',
+            description: error.message,
+            variant: 'destructive',
+          });
+        } else {
+          const newUser = data.session?.user ?? data.user ?? null;
+          if (newUser) await ensureProfile(newUser.id, email);
+          toast({
+            title: newUser ? 'Account created' : 'Check your email',
+            description: newUser
+              ? 'You are signed in and ready to go.'
+              : 'We sent you a confirmation link to complete sign up.',
+          });
+        }
       } else {
-        toast({
-          title: "Welcome back!",
-          description: "Successfully signed in to admin dashboard.",
-        });
+        const { data, error } = await signIn(email, password);
+        if (error) {
+          toast({
+            title: 'Authentication failed',
+            description: error.message,
+            variant: 'destructive',
+          });
+        } else {
+          const signedUser = data.session?.user ?? data.user ?? null;
+          if (signedUser) await ensureProfile(signedUser.id, email);
+          toast({
+            title: 'Welcome back!',
+            description: 'Successfully signed in to admin dashboard.',
+          });
+        }
       }
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: "An unexpected error occurred.",
-        variant: "destructive"
+        title: 'Error',
+        description: 'An unexpected error occurred.',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -127,7 +169,7 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSignIn} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -154,18 +196,27 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Signing in...
+                      {isSignUp ? 'Creating account...' : 'Signing in...'}
                     </>
                   ) : (
-                    'Sign In'
+                    isSignUp ? 'Create Account' : 'Sign In'
                   )}
                 </Button>
               </form>
-              <div className="mt-6 text-xs text-muted-foreground text-center">
-                <p>Demo credentials:</p>
-                <p>Email: admin@restaurant.com</p>
-                <p>Password: admin123</p>
-              </div>
+                <div className="mt-3 text-sm text-center">
+                  <button
+                    type="button"
+                    className="underline text-primary"
+                    onClick={() => setIsSignUp((s) => !s)}
+                  >
+                    {isSignUp ? 'Have an account? Sign in' : "Don't have an account? Create one"}
+                  </button>
+                </div>
+                <div className="mt-6 text-xs text-muted-foreground text-center">
+                  <p>Demo credentials:</p>
+                  <p>Email: admin@restaurant.com</p>
+                  <p>Password: admin123</p>
+                </div>
             </CardContent>
           </Card>
         </div>
