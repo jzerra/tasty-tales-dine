@@ -44,9 +44,9 @@ export const menuImages = {
   egusiSoup: egusiSoupImg,
   fisherManSoup: pepperSoupImg, // Replace with actual fisher soup image
   vegetableSoup: "/lovable-uploads/59043c54-7a35-4ca8-b935-59329723f552.png",
-  bangaSoup: "/lovable-uploads/49a1dc0d-6042-47ea-8e6a-12188b11a478.png",
-  whiteSoup: "/lovable-uploads/e16e4339-8f2c-446d-9d01-1c24e2063258.png",
-  seafoodOkra: "/lovable-uploads/1a9ea0f3-8d1e-4cf9-afff-d767903a650c.png",
+  bangaSoup: "/lovable-uploads/e16e4339-8f2c-446d-9d01-1c24e2063258.png",
+  whiteSoup: "/lovable-uploads/1a9ea0f3-8d1e-4cf9-afff-d767903a650c.png",
+  seafoodOkra: "/lovable-uploads/49a1dc0d-6042-47ea-8e6a-12188b11a478.png",
 
   // Chewable  
   goatMeatPepperSoup: pepperSoupImg, // Replace with actual goat meat image
