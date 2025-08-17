@@ -41,15 +41,15 @@ import grilledCatfishImg from "@/assets/grilled-catfish.jpg";
 export const menuImages = {
   // Dishes
   afangSoup: "/lovable-uploads/b50c7ee7-fe5d-40dc-b75c-fa32d5a99d36.png",
-  egusiSoup: egusiSoupImg,
-  fisherManSoup: pepperSoupImg, // Replace with actual fisher soup image
+  egusiSoup: "/lovable-uploads/e804b85c-9158-49fe-a2b1-aa99197c2003.png",
+  fisherManSoup: "/lovable-uploads/e89cd784-5b1a-4145-a9fd-33e2ecd93acd.png",
   vegetableSoup: "/lovable-uploads/59043c54-7a35-4ca8-b935-59329723f552.png",
   bangaSoup: "/lovable-uploads/e16e4339-8f2c-446d-9d01-1c24e2063258.png",
   whiteSoup: "/lovable-uploads/1a9ea0f3-8d1e-4cf9-afff-d767903a650c.png",
   seafoodOkra: "/lovable-uploads/49a1dc0d-6042-47ea-8e6a-12188b11a478.png",
 
   // Chewable  
-  goatMeatPepperSoup: pepperSoupImg, // Replace with actual goat meat image
+  goatMeatPepperSoup: "/lovable-uploads/21fcaa50-02ab-4f53-b217-ea65c4003480.png",
   catfishPepperSoup: grilledCatfishImg, // Replace with actual catfish soup image
   pepperedKpomo: pepperSoupImg, // Replace with actual kpomo image
   saucedSnail: pepperSoupImg, // Replace with actual snail image
