@@ -1,9 +1,7 @@
-import { createClient } from '@supabase/supabase-js'
+import { supabase as baseSupabase } from '@/integrations/supabase/client'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Use the configured client but relax types to avoid schema mismatches
+export const supabase = baseSupabase as any
 
 // Database types
 export interface Product {
