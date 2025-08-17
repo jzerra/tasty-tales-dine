@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, Shield } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/lib/supabase';
 
 interface AdminAuthProps {
   children: React.ReactNode;
@@ -15,8 +16,40 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const { user, signIn, loading: authLoading } = useAuth();
   const { toast } = useToast();
+
+  // Check if the current user is an admin
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      if (!user) {
+        setIsAdmin(null);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('user_id', user.id)
+          .single();
+
+        if (error) {
+          console.error('Error checking admin role:', error);
+          setIsAdmin(false);
+          return;
+        }
+
+        setIsAdmin(data?.role === 'admin');
+      } catch (error) {
+        console.error('Error checking admin role:', error);
+        setIsAdmin(false);
+      }
+    };
+
+    checkAdminRole();
+  }, [user]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +81,7 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
     }
   };
 
-  if (authLoading) {
+  if (authLoading || (user && isAdmin === null)) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center">
         <div className="text-center">
@@ -59,7 +92,27 @@ const AdminAuth = ({ children }: AdminAuthProps) => {
     );
   }
 
-  if (!user) {
+  if (!user || isAdmin === false) {
+    if (user && isAdmin === false) {
+      return (
+        <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center">
+          <Card className="w-full max-w-md mx-auto">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <Shield className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <h2 className="text-xl font-semibold mb-2">Access Denied</h2>
+                <p className="text-muted-foreground mb-4">
+                  You don't have admin privileges to access this area.
+                </p>
+                <Button variant="outline" onClick={() => window.location.href = '/'}>
+                  Return to Homepage
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center">
         <div className="w-full max-w-md mx-auto px-4">
