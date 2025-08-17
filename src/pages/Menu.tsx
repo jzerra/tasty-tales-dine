@@ -339,6 +339,27 @@ const Menu = () => {
       rating: 4.6,
       popular: false,
     },
+    // Rice dishes
+    {
+      id: 31,
+      name: "Fried Rice",
+      description: "Perfectly seasoned fried rice with vegetables and protein",
+      price: 5500,
+      category: "dishes",
+      image: menuImages.friedRice,
+      rating: 4.7,
+      popular: true,
+    },
+    {
+      id: 32,
+      name: "Jollof Rice",
+      description: "Traditional Nigerian jollof rice with rich tomato flavor",
+      price: 5000,
+      category: "dishes",
+      image: menuImages.jollofRice,
+      rating: 4.9,
+      popular: true,
+    },
   ];
 
   const filteredItems = activeCategory === "all" 

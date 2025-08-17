@@ -50,7 +50,7 @@ export const menuImages = {
 
   // Chewable  
   goatMeatPepperSoup: "/lovable-uploads/21fcaa50-02ab-4f53-b217-ea65c4003480.png",
-  catfishPepperSoup: grilledCatfishImg, // Replace with actual catfish soup image
+  catfishPepperSoup: "/lovable-uploads/c5e8accb-8cb7-43d3-b277-c0a79df2e022.png",
   pepperedKpomo: pepperSoupImg, // Replace with actual kpomo image
   saucedSnail: pepperSoupImg, // Replace with actual snail image
   isieEwu: pepperSoupImg, // Replace with actual isie ewu image
@@ -61,7 +61,7 @@ export const menuImages = {
 
   // Pastries
   meatPie: meatPieImg, // Keep this one
-  chinChin: meatPieImg, // Replace with actual chin chin image
+  chinChin: "/lovable-uploads/516c6f5f-d06e-492a-b9e0-3ade3c858d8c.png",
   samosa: meatPieImg, // Replace with actual samosa image
   eggRoll: meatPieImg, // Replace with actual egg roll image
   panCake: meatPieImg, // Replace with actual pancake image
@@ -70,6 +70,10 @@ export const menuImages = {
   springRolls: meatPieImg, // Replace with actual spring rolls image
   puffPuff: meatPieImg, // Replace with actual puff puff image
   cupCake: meatPieImg, // Replace with actual cupcake image
+
+  // Rice dishes
+  friedRice: "/lovable-uploads/221f8004-06fe-4670-b3a9-673828a58c32.png",
+  jollofRice: "/lovable-uploads/24c6c594-9522-46e2-90a9-30c222daeee2.png",
 
   // Wines & Spirits
   redWine: meatPieImg, // Replace with actual wine bottle image
