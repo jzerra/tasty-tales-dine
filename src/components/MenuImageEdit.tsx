@@ -51,13 +51,13 @@ export const menuImages = {
   // Chewable  
   goatMeatPepperSoup: "/lovable-uploads/21fcaa50-02ab-4f53-b217-ea65c4003480.png",
   catfishPepperSoup: "/lovable-uploads/c5e8accb-8cb7-43d3-b277-c0a79df2e022.png",
-  pepperedKpomo: pepperSoupImg, // Replace with actual kpomo image
-  saucedSnail: pepperSoupImg, // Replace with actual snail image
-  isieEwu: pepperSoupImg, // Replace with actual isie ewu image
-  nkwobi: pepperSoupImg, // Replace with actual nkwobi image
-  grilledChicken: grilledCatfishImg, // Replace with actual grilled chicken image
-  grilledFish: grilledCatfishImg, // Keep or replace with different fish image
-  bolle: grilledCatfishImg, // Replace with actual bolle image
+  pepperedKpomo: "/lovable-uploads/4719cca8-5c59-4905-bbe8-ba773a95f392.png",
+  saucedSnail: "/lovable-uploads/b92e17e5-f7ad-4938-8d85-2c06796e8ba8.png",
+  isieEwu: "/lovable-uploads/6828ad80-c96f-4aaa-bbbf-b1c0401c30f9.png",
+  nkwobi: "/lovable-uploads/d4a3bef3-1c81-4758-887f-c7445fc38ead.png",
+  grilledChicken: "/lovable-uploads/f241924b-781c-4942-bdf5-9cbeaca2fc62.png",
+  grilledFish: "/lovable-uploads/e044f780-835a-4f10-8fd3-a882395e3ffa.png",
+  bolle: "/lovable-uploads/05d2f13b-3172-42c0-b663-72ed88e37292.png",
 
   // Pastries
   meatPie: meatPieImg, // Keep this one
