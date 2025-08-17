@@ -7,29 +7,200 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Clock, MapPin, CreditCard, Truck, ShoppingBag } from "lucide-react";
+import { Clock, MapPin, CreditCard, Truck, ShoppingBag, Loader2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
+import { initializePaystackPayment, generateReference } from "@/lib/paystack";
 
 const Checkout = () => {
   const [orderType, setOrderType] = useState("delivery");
   const [paymentMethod, setPaymentMethod] = useState("card");
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    instructions: ''
+  });
   const { state: cartState, clearCart } = useCart();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const subtotal = cartState.total;
   const deliveryFee = orderType === "delivery" ? 2000 : 0;
   const tax = Math.round(subtotal * 0.075); // 7.5% VAT
   const total = subtotal + deliveryFee + tax;
 
-  const handlePlaceOrder = () => {
-    // Simulate order placement
-    toast({
-      title: "Order placed successfully!",
-      description: "You will receive a confirmation email shortly.",
-    });
-    clearCart();
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.id]: e.target.value
+    }));
+  };
+
+  const validateForm = () => {
+    const required = ['firstName', 'lastName', 'email', 'phone'];
+    if (orderType === 'delivery') {
+      required.push('address', 'city', 'state');
+    }
+    
+    for (const field of required) {
+      if (!formData[field as keyof typeof formData]) {
+        toast({
+          title: "Missing information",
+          description: `Please fill in all required fields`,
+          variant: "destructive"
+        });
+        return false;
+      }
+    }
+    
+    if (!formData.email.includes('@')) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address",
+        variant: "destructive"
+      });
+      return false;
+    }
+    
+    return true;
+  };
+
+  const createOrder = async () => {
+    try {
+      // Create customer first
+      const { data: customer, error: customerError } = await supabase
+        .from('customers')
+        .upsert({
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phone
+        }, { 
+          onConflict: 'email',
+          ignoreDuplicates: false 
+        })
+        .select()
+        .single();
+
+      if (customerError && customerError.code !== '23505') {
+        throw customerError;
+      }
+
+      // Create order
+      const orderData = {
+        customer_id: customer?.id || null,
+        customer_name: `${formData.firstName} ${formData.lastName}`,
+        customer_phone: formData.phone,
+        customer_email: formData.email,
+        delivery_address: orderType === 'delivery' ? 
+          `${formData.address}, ${formData.city}, ${formData.state}` : null,
+        order_type: orderType,
+        payment_method: paymentMethod,
+        payment_status: paymentMethod === 'cash' ? 'pending' : 'pending',
+        order_status: 'pending',
+        subtotal,
+        delivery_fee: deliveryFee,
+        tax,
+        total,
+        delivery_instructions: formData.instructions || null,
+        paystack_reference: paymentMethod === 'card' ? generateReference() : null
+      };
+
+      const { data: order, error: orderError } = await supabase
+        .from('orders')
+        .insert(orderData)
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      // Create order items
+      const orderItems = cartState.items.map(item => ({
+        order_id: order.id,
+        product_id: item.id,
+        product_name: item.name,
+        product_price: item.price,
+        product_image: item.image,
+        quantity: item.quantity,
+        subtotal: item.price * item.quantity
+      }));
+
+      const { error: itemsError } = await supabase
+        .from('order_items')
+        .insert(orderItems);
+
+      if (itemsError) throw itemsError;
+
+      return order;
+    } catch (error: any) {
+      console.error('Order creation error:', error);
+      throw error;
+    }
+  };
+
+  const handlePlaceOrder = async () => {
+    if (!validateForm()) return;
+    
+    setLoading(true);
+    
+    try {
+      const order = await createOrder();
+      
+      if (paymentMethod === 'card') {
+        // Initialize Paystack payment
+        await initializePaystackPayment({
+          reference: order.paystack_reference!,
+          email: formData.email,
+          amount: total * 100, // Convert to kobo
+          publicKey: '', // Will be set in paystack.ts
+          callback: async (response: any) => {
+            if (response.status === 'success') {
+              // Update payment status
+              await supabase
+                .from('orders')
+                .update({ payment_status: 'paid' })
+                .eq('id', order.id);
+              
+              toast({
+                title: "Payment successful!",
+                description: `Order ${order.id} has been placed successfully.`,
+              });
+              
+              clearCart();
+              navigate('/');
+            }
+          },
+          close: () => {
+            setLoading(false);
+          }
+        });
+      } else {
+        // For cash/bank transfer
+        toast({
+          title: "Order placed successfully!",
+          description: `Order ${order.id} has been received. You will be contacted for ${paymentMethod === 'cash' ? 'payment on ' + orderType : 'payment instructions'}.`,
+        });
+        
+        clearCart();
+        navigate('/');
+      }
+    } catch (error: any) {
+      toast({
+        title: "Order failed",
+        description: error.message || "Failed to place order. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (cartState.items.length === 0) {
@@ -93,20 +264,46 @@ const Checkout = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" placeholder="John" />
+                      <Input 
+                        id="firstName" 
+                        placeholder="John" 
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        required
+                      />
                     </div>
                     <div>
                       <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" placeholder="Doe" />
+                      <Input 
+                        id="lastName" 
+                        placeholder="Doe" 
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        required
+                      />
                     </div>
                   </div>
                   <div>
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="john@example.com" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      placeholder="john@example.com" 
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                    />
                   </div>
                   <div>
                     <Label htmlFor="phone">Phone Number</Label>
-                    <Input id="phone" type="tel" placeholder="+234 801 234 5678" />
+                    <Input 
+                      id="phone" 
+                      type="tel" 
+                      placeholder="+234 801 234 5678" 
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      required
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -120,21 +317,44 @@ const Checkout = () => {
                   <CardContent className="space-y-4">
                     <div>
                       <Label htmlFor="address">Street Address</Label>
-                      <Input id="address" placeholder="123 Winery Lane" />
+                      <Input 
+                        id="address" 
+                        placeholder="123 Winery Lane" 
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        required
+                      />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="city">City</Label>
-                        <Input id="city" placeholder="Lagos" />
+                        <Input 
+                          id="city" 
+                          placeholder="Lagos" 
+                          value={formData.city}
+                          onChange={handleInputChange}
+                          required
+                        />
                       </div>
                       <div>
                         <Label htmlFor="state">State</Label>
-                        <Input id="state" placeholder="Lagos State" />
+                        <Input 
+                          id="state" 
+                          placeholder="Lagos State" 
+                          value={formData.state}
+                          onChange={handleInputChange}
+                          required
+                        />
                       </div>
                     </div>
                     <div>
                       <Label htmlFor="instructions">Delivery Instructions (Optional)</Label>
-                      <Textarea id="instructions" placeholder="Ring doorbell, leave at gate, etc." />
+                      <Textarea 
+                        id="instructions" 
+                        placeholder="Ring doorbell, leave at gate, etc." 
+                        value={formData.instructions}
+                        onChange={handleInputChange}
+                      />
                     </div>
                   </CardContent>
                 </Card>
@@ -242,8 +462,20 @@ const Checkout = () => {
                     </div>
                   </div>
 
-                  <Button className="w-full" size="lg" onClick={handlePlaceOrder}>
-                    Place Order - ₦{total.toLocaleString()}
+                  <Button 
+                    className="w-full" 
+                    size="lg" 
+                    onClick={handlePlaceOrder}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      `Place Order - ₦${total.toLocaleString()}`
+                    )}
                   </Button>
 
                   <p className="text-xs text-muted-foreground text-center">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,89 +11,172 @@ import {
   DollarSign, 
   Users,
   Truck,
-  MapPin
+  MapPin,
+  Loader2,
+  LogOut
 } from "lucide-react";
+import { supabase, Order, Reservation } from "@/lib/supabase";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import AdminAuth from "@/components/AdminAuth";
 
 const Admin = () => {
-  const [orders, setOrders] = useState([
-    {
-      id: "ORD-001",
-      customer: "John Doe",
-      items: ["Grilled Salmon", "Pasta Carbonara"],
-      total: 53.98,
-      status: "pending",
-      type: "delivery",
-      time: "2024-01-15 18:30",
-      phone: "(555) 123-4567",
-      address: "123 Main St, New York, NY"
-    },
-    {
-      id: "ORD-002",
-      customer: "Jane Smith",
-      items: ["Beef Tenderloin", "Chocolate Cake"],
-      total: 58.98,
-      status: "preparing",
-      type: "pickup",
-      time: "2024-01-15 19:00",
-      phone: "(555) 987-6543",
-      address: null
-    },
-    {
-      id: "ORD-003",
-      customer: "Bob Johnson",
-      items: ["Mediterranean Salad", "Bruschetta"],
-      total: 31.98,
-      status: "completed",
-      type: "delivery",
-      time: "2024-01-15 17:45",
-      phone: "(555) 456-7890",
-      address: "456 Oak Ave, New York, NY"
-    },
-  ]);
+  const [orders, setOrders] = useState<(Order & { items: string[] })[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { signOut } = useAuth();
+  const { toast } = useToast();
 
-  const [reservations, setReservations] = useState([
-    {
-      id: "RES-001",
-      customer: "Alice Wilson",
-      date: "2024-01-16",
-      time: "7:00 PM",
-      guests: 4,
-      phone: "(555) 111-2222",
-      occasion: "Anniversary",
-      status: "confirmed"
-    },
-    {
-      id: "RES-002",
-      customer: "Mike Davis",
-      date: "2024-01-16",
-      time: "7:30 PM",
-      guests: 2,
-      phone: "(555) 333-4444",
-      occasion: "Date Night",
-      status: "pending"
-    },
-    {
-      id: "RES-003",
-      customer: "Sarah Brown",
-      date: "2024-01-17",
-      time: "6:00 PM",
-      guests: 6,
-      phone: "(555) 555-6666",
-      occasion: "Birthday",
-      status: "confirmed"
-    },
-  ]);
+  const fetchOrders = async () => {
+    try {
+      const { data: ordersData, error: ordersError } = await supabase
+        .from('orders')
+        .select(`
+          *,
+          order_items (
+            product_name,
+            quantity
+          )
+        `)
+        .order('created_at', { ascending: false });
 
-  const updateOrderStatus = (orderId: string, newStatus: string) => {
-    setOrders(orders.map(order => 
-      order.id === orderId ? { ...order, status: newStatus } : order
-    ));
+      if (ordersError) throw ordersError;
+
+      const formattedOrders = ordersData?.map(order => ({
+        ...order,
+        order_status: order.order_status as Order['order_status'],
+        items: order.order_items?.map((item: any) => 
+          `${item.product_name} (${item.quantity})`
+        ) || []
+      })) || [];
+
+      setOrders(formattedOrders as (Order & { items: string[] })[]);
+    } catch (error: any) {
+      console.error('Error fetching orders:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load orders",
+        variant: "destructive"
+      });
+    }
   };
 
-  const updateReservationStatus = (reservationId: string, newStatus: string) => {
-    setReservations(reservations.map(reservation => 
-      reservation.id === reservationId ? { ...reservation, status: newStatus } : reservation
-    ));
+  const fetchReservations = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('reservations')
+        .select('*')
+        .order('reservation_date', { ascending: true })
+        .order('reservation_time', { ascending: true });
+
+      if (error) throw error;
+      setReservations((data || []).map(res => ({
+        ...res,
+        status: res.status as Reservation['status']
+      })) as Reservation[]);
+    } catch (error: any) {
+      console.error('Error fetching reservations:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load reservations",
+        variant: "destructive"
+      });
+    }
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      await Promise.all([fetchOrders(), fetchReservations()]);
+      setLoading(false);
+    };
+
+    loadData();
+
+    // Set up real-time subscriptions
+    const ordersSubscription = supabase
+      .channel('orders')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'orders' },
+        () => fetchOrders()
+      )
+      .subscribe();
+
+    const reservationsSubscription = supabase
+      .channel('reservations')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'reservations' },
+        () => fetchReservations()
+      )
+      .subscribe();
+
+    return () => {
+      ordersSubscription.unsubscribe();
+      reservationsSubscription.unsubscribe();
+    };
+  }, []);
+
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({ order_status: newStatus })
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      setOrders(orders.map(order => 
+        order.id === orderId ? { ...order, order_status: newStatus as Order['order_status'] } : order
+      ));
+
+      toast({
+        title: "Order updated",
+        description: `Order status changed to ${newStatus}`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to update order status",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const updateReservationStatus = async (reservationId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('reservations')
+        .update({ status: newStatus })
+        .eq('id', reservationId);
+
+      if (error) throw error;
+
+      setReservations(reservations.map(reservation => 
+        reservation.id === reservationId ? { ...reservation, status: newStatus as Reservation['status'] } : reservation
+      ));
+
+      toast({
+        title: "Reservation updated",
+        description: `Reservation status changed to ${newStatus}`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to update reservation status",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out",
+        variant: "destructive"
+      });
+    }
   };
 
   const getStatusBadgeVariant = (status: string) => {
@@ -117,20 +200,40 @@ const Admin = () => {
   };
 
   // Calculate stats
-  const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
-  const pendingOrders = orders.filter(order => order.status === "pending").length;
+  const totalRevenue = orders.reduce((sum, order) => sum + (order.total || 0), 0);
+  const pendingOrders = orders.filter(order => order.order_status === "pending").length;
   const totalReservations = reservations.length;
   const confirmedReservations = reservations.filter(res => res.status === "confirmed").length;
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">Restaurant Admin Dashboard</h1>
-            <p className="text-muted-foreground">Manage orders, reservations, and track performance</p>
+  if (loading) {
+    return (
+      <AdminAuth>
+        <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground">Loading dashboard...</p>
           </div>
+        </div>
+      </AdminAuth>
+    );
+  }
+
+  return (
+    <AdminAuth>
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-7xl mx-auto">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-8">
+              <div className="text-center flex-1">
+                <h1 className="text-3xl font-bold mb-2">Restaurant Admin Dashboard</h1>
+                <p className="text-muted-foreground">Manage orders, reservations, and track performance</p>
+              </div>
+              <Button variant="outline" onClick={handleSignOut}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -140,7 +243,7 @@ const Admin = () => {
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
+                <div className="text-2xl font-bold">₦{totalRevenue.toLocaleString()}</div>
                 <p className="text-xs text-muted-foreground">+20.1% from last month</p>
               </CardContent>
             </Card>
@@ -170,7 +273,7 @@ const Admin = () => {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">${(totalRevenue / orders.length).toFixed(2)}</div>
+                <div className="text-2xl font-bold">₦{orders.length > 0 ? (totalRevenue / orders.length).toLocaleString() : '0'}</div>
                 <p className="text-xs text-muted-foreground">+5.2% from last week</p>
               </CardContent>
             </Card>
@@ -197,25 +300,27 @@ const Admin = () => {
                         <div className="flex justify-between items-start">
                           <div>
                             <div className="flex items-center gap-2 mb-2">
-                              <h3 className="font-semibold">{order.id}</h3>
-                              <Badge variant={getStatusBadgeVariant(order.status)} className="flex items-center gap-1">
-                                {getStatusIcon(order.status)}
-                                {order.status}
+                              <h3 className="font-semibold">{order.id.slice(0, 8)}...</h3>
+                              <Badge variant={getStatusBadgeVariant(order.order_status)} className="flex items-center gap-1">
+                                {getStatusIcon(order.order_status)}
+                                {order.order_status}
                               </Badge>
                               <Badge variant="outline" className="flex items-center gap-1">
-                                {order.type === "delivery" ? <Truck className="h-3 w-3" /> : <MapPin className="h-3 w-3" />}
-                                {order.type}
+                                {order.order_type === "delivery" ? <Truck className="h-3 w-3" /> : <MapPin className="h-3 w-3" />}
+                                {order.order_type}
                               </Badge>
                             </div>
-                            <p className="text-sm font-medium">{order.customer}</p>
-                            <p className="text-sm text-muted-foreground">{order.phone}</p>
-                            {order.address && (
-                              <p className="text-sm text-muted-foreground">{order.address}</p>
+                            <p className="text-sm font-medium">{order.customer_name}</p>
+                            <p className="text-sm text-muted-foreground">{order.customer_phone}</p>
+                            {order.delivery_address && (
+                              <p className="text-sm text-muted-foreground">{order.delivery_address}</p>
                             )}
                           </div>
                           <div className="text-right">
-                            <p className="text-lg font-bold">${order.total.toFixed(2)}</p>
-                            <p className="text-sm text-muted-foreground">{order.time}</p>
+                            <p className="text-lg font-bold">₦{order.total.toLocaleString()}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {new Date(order.created_at).toLocaleDateString()} {new Date(order.created_at).toLocaleTimeString()}
+                            </p>
                           </div>
                         </div>
                         
@@ -224,9 +329,9 @@ const Admin = () => {
                           <p className="text-sm text-muted-foreground">{order.items.join(", ")}</p>
                         </div>
 
-                        {order.status !== "completed" && (
+                        {order.order_status !== "completed" && (
                           <div className="flex gap-2">
-                            {order.status === "pending" && (
+                            {order.order_status === "pending" && (
                               <Button 
                                 size="sm" 
                                 variant="warm"
@@ -235,7 +340,15 @@ const Admin = () => {
                                 Start Preparing
                               </Button>
                             )}
-                            {order.status === "preparing" && (
+                            {order.order_status === "preparing" && (
+                              <Button 
+                                size="sm" 
+                                onClick={() => updateOrderStatus(order.id, "ready")}
+                              >
+                                Mark Ready
+                              </Button>
+                            )}
+                            {order.order_status === "ready" && (
                               <Button 
                                 size="sm" 
                                 variant="default"
@@ -273,15 +386,15 @@ const Admin = () => {
                                 {reservation.status}
                               </Badge>
                             </div>
-                            <p className="text-sm font-medium">{reservation.customer}</p>
-                            <p className="text-sm text-muted-foreground">{reservation.phone}</p>
-                            {reservation.occasion !== "Regular Dining" && (
+                            <p className="text-sm font-medium">{reservation.customer_name}</p>
+                            <p className="text-sm text-muted-foreground">{reservation.customer_phone}</p>
+                            {reservation.occasion && reservation.occasion !== "Regular Dining" && (
                               <p className="text-sm text-accent">Special Occasion: {reservation.occasion}</p>
                             )}
                           </div>
                           <div className="text-right">
-                            <p className="text-sm font-medium">{reservation.date}</p>
-                            <p className="text-sm font-medium">{reservation.time}</p>
+                            <p className="text-sm font-medium">{new Date(reservation.reservation_date).toLocaleDateString()}</p>
+                            <p className="text-sm font-medium">{reservation.reservation_time}</p>
                             <p className="text-sm text-muted-foreground">{reservation.guests} guests</p>
                           </div>
                         </div>
@@ -313,7 +426,8 @@ const Admin = () => {
           </Tabs>
         </div>
       </div>
-    </div>
+      </div>
+    </AdminAuth>
   );
 };
 
