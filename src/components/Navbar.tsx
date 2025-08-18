@@ -13,6 +13,7 @@ const Navbar = () => {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Menu", path: "/menu" },
+    { name: "Drinks", path: "/drinks" },
     { name: "Reservations", path: "/reservations" },
     { name: "Contact", path: "/contact" },
   ];

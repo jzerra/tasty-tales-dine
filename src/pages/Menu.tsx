@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -436,6 +437,21 @@ const Menu = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Drinks Section */}
+        <div className="text-center mt-12 mb-8">
+          <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-6">
+            <h3 className="text-2xl font-bold mb-3">Looking for Drinks?</h3>
+            <p className="text-muted-foreground mb-4">
+              Check out our extensive drinks menu with premium whisky, wines, spirits & more.
+            </p>
+            <Link to="/drinks">
+              <Button variant="default" size="lg">
+                View Drinks Menu
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Call to Action */}
