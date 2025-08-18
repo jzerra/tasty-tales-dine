@@ -99,7 +99,7 @@ const Index = () => {
           
           <p className="text-lg md:text-xl lg:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed text-white/90">
             Where Nigerian culinary artistry meets premium wine culture. Experience the finest 
-            traditional dishes paired with exceptional wines in Lagos's most elegant dining destination.
+            traditional dishes paired with exceptional wines in Uyo's most elegant dining destination.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -328,9 +328,9 @@ const Index = () => {
                   <MapPin className="h-6 w-6" />
                   <span className="text-sm uppercase tracking-wide font-semibold">Visit Us</span>
                 </div>
-                <h2 className="text-3xl lg:text-4xl font-bold mb-6">Experience Lagos's Finest Nigerian Dining</h2>
+                <h2 className="text-3xl lg:text-4xl font-bold mb-6">Experience Uyo's Finest Nigerian Dining</h2>
                 <p className="text-lg text-muted-foreground">
-                  Located in the heart of Victoria Island, we're easily accessible and ready to welcome 
+                  Located in the heart of Uyo, we're easily accessible and ready to welcome 
                   you to an unforgettable culinary journey.
                 </p>
               </div>

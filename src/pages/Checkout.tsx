@@ -330,7 +330,7 @@ const Checkout = () => {
                         <Label htmlFor="city">City</Label>
                         <Input 
                           id="city" 
-                          placeholder="Lagos" 
+                          placeholder="Uyo" 
                           value={formData.city}
                           onChange={handleInputChange}
                           required
@@ -340,7 +340,7 @@ const Checkout = () => {
                         <Label htmlFor="state">State</Label>
                         <Input 
                           id="state" 
-                          placeholder="Lagos State" 
+                          placeholder="Akwa Ibom State" 
                           value={formData.state}
                           onChange={handleInputChange}
                           required
