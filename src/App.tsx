@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import FloatingCart from "./components/FloatingCart";
 import Index from "./pages/Index";
 import Menu from "./pages/Menu";
+import Drinks from "./pages/Drinks";
 import Checkout from "./pages/Checkout";
 import Reservations from "./pages/Reservations";
 import Admin from "./pages/Admin";
@@ -26,6 +27,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/menu" element={<Menu />} />
+            <Route path="/drinks" element={<Drinks />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/reservations" element={<Reservations />} />
             <Route path="/admin" element={<Admin />} />
