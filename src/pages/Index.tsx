@@ -5,12 +5,41 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Clock, MapPin, Phone, Mail, Utensils, Heart, Award, Wine, ChefHat, Sparkles } from "lucide-react";
 import heroImage from "@/assets/nigerian-restaurant-hero.jpg";
 import afangSoupImg from "@/assets/afang-soup.jpg";
-import pepperSoupImg from "@/assets/pepper-soup.jpg";
-import meatPieImg from "@/assets/meat-pie.jpg";
+import melonSoupImg from "@/assets/melon-soup.jpg";
+import hennesyImg from "@/assets/hennessy-cognac.jpg";
+import iseEwuImg from "@/assets/ise-ewu.jpg";
+import jollofRiceImg from "@/assets/jollof-rice.jpg";
+import friedRiceImg from "@/assets/fried-rice.jpg";
 import egusiSoupImg from "@/assets/egusi-soup.jpg";
+import meatPieImg from "@/assets/meat-pie.jpg";
+import pepperSoupImg from "@/assets/pepper-soup.jpg";
 
 const Index = () => {
   const featuredDishes = [
+    {
+      name: "Melon Soup",
+      description: "Traditional Nigerian melon soup with rich vegetables and tender meat",
+      price: 12000,
+      image: melonSoupImg,
+      rating: 4.8,
+      category: "Signature"
+    },
+    {
+      name: "Hennessy VS",
+      description: "Premium cognac with smooth finish, perfect for special occasions",
+      price: 55000,
+      image: hennesyImg,
+      rating: 4.9,
+      category: "Premium Drinks"
+    },
+    {
+      name: "Ise Ewu",
+      description: "Traditional spicy goat head delicacy with aromatic herbs and spices",
+      price: 15000,
+      image: iseEwuImg,
+      rating: 4.7,
+      category: "Signature"
+    },
     {
       name: "Afang Soup",
       description: "Rich traditional soup with Afang leaves, stockfish, and assorted meat",
@@ -20,20 +49,20 @@ const Index = () => {
       category: "Signature"
     },
     {
-      name: "Goat Meat Pepper Soup",
-      description: "Aromatic spicy broth with tender goat meat and traditional herbs",
+      name: "Jollof Rice",
+      description: "Signature Nigerian rice dish with vibrant flavors and perfect spice blend",
       price: 8000,
-      image: pepperSoupImg,
+      image: jollofRiceImg,
       rating: 4.9,
-      category: "Chewable"
+      category: "Rice Dishes"
     },
     {
-      name: "Meat Pie",
-      description: "Golden flaky pastry filled with seasoned minced meat and vegetables",
-      price: 2000,
-      image: meatPieImg,
-      rating: 4.7,
-      category: "Pastries"
+      name: "Fried Rice",
+      description: "Colorful fried rice with mixed vegetables and aromatic seasonings",
+      price: 7500,
+      image: friedRiceImg,
+      rating: 4.6,
+      category: "Rice Dishes"
     },
   ];
 
@@ -149,7 +178,7 @@ const Index = () => {
             <div className="relative">
               <div className="aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl">
                 <img
-                  src={egusiSoupImg}
+                  src={friedRiceImg}
                   alt="Chef preparing traditional Nigerian cuisine"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
@@ -214,15 +243,15 @@ const Index = () => {
                   <img src={afangSoupImg} alt="Afang Soup" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <div className="aspect-[4/3] overflow-hidden rounded-2xl">
-                  <img src={meatPieImg} alt="Meat Pie" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                  <img src={jollofRiceImg} alt="Jollof Rice" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
               </div>
               <div className="space-y-4 pt-8">
                 <div className="aspect-[4/3] overflow-hidden rounded-2xl">
-                  <img src={pepperSoupImg} alt="Pepper Soup" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                  <img src={iseEwuImg} alt="Ise Ewu" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <div className="aspect-square overflow-hidden rounded-2xl">
-                  <img src={egusiSoupImg} alt="Egusi Soup" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                  <img src={melonSoupImg} alt="Melon Soup" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
               </div>
             </div>
