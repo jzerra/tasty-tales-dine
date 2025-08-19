@@ -74,6 +74,19 @@ export const menuImages = {
   // Rice dishes
   friedRice: "/lovable-uploads/221f8004-06fe-4670-b3a9-673828a58c32.png",
   jollofRice: "/lovable-uploads/24c6c594-9522-46e2-90a9-30c222daeee2.png",
+  nativeSoup: "/lovable-uploads/c66ad4a7-2b60-45b2-a6e5-a6e7b024a14b.png",
+  nativeSoupSeafood: "/lovable-uploads/6146a5e0-bbef-48c6-ac1c-94fbae0c792d.png",
+  nativeRice: "/lovable-uploads/7e319837-145e-404f-b958-f9b619016628.png",
+  coconutRice: "/lovable-uploads/374c8964-2e1a-42d0-83df-49ad1fe901d4.png",
+  chickenPepperSoup: "/lovable-uploads/38d9579c-7cf3-4053-b8a3-94e6c4027fb7.png",
+  goatMeatChips: "/lovable-uploads/1356600c-9e4b-4518-92ed-921c8445ab42.png",
+  chickenChips: "/lovable-uploads/1338f703-26db-4858-b307-6b2e96222c4f.png",
+
+  // Swallow dishes
+  semovita: "/lovable-uploads/b646853e-e5e8-44e5-934a-7a3ebc509ac0.png",
+  garri: "/lovable-uploads/bdc9d02c-ee48-4fb3-9962-2aac98148fe8.png",
+  fufu: "/lovable-uploads/43d94e10-53d9-42e4-a6eb-2d695a9bafc0.png",
+  poundo: "/lovable-uploads/b646853e-e5e8-44e5-934a-7a3ebc509ac0.png",
 
   // Wines & Spirits
   redWine: meatPieImg, // Replace with actual wine bottle image
