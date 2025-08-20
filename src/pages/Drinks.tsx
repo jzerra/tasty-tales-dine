@@ -15,6 +15,14 @@ import jamesonImg from "@/assets/jameson-whiskey.jpg";
 import smirnoffImg from "@/assets/smirnoff-vodka.jpg";
 import waterImg from "@/assets/water-bottle.jpg";
 import macallanImg from "@/assets/macallan-whisky.jpg";
+import starBeerImg from "@/assets/star-beer.jpg";
+import budweiserImg from "@/assets/budweiser-bottle.jpg";
+import guinnessImg from "@/assets/guinness-bottle.jpg";
+import heinekenImg from "@/assets/heineken-bottle.jpg";
+import pepsiImg from "@/assets/pepsi-bottle.jpg";
+import monsterImg from "@/assets/monster-energy.jpg";
+import hollandiaImg from "@/assets/hollandia-yogurt.jpg";
+import genericBeerImg from "@/assets/generic-beer.jpg";
 
 interface DrinkItem {
   id: number;
@@ -109,12 +117,60 @@ const Drinks = () => {
     { id: 59, name: "Portal", price: 12000, category: "Others / To Verify", image: smirnoffImg, inStock: true },
     { id: 60, name: "Small imperial", price: 1500, category: "Others / To Verify", image: smirnoffImg, inStock: true },
 
+    // Beer & Local Beverages
+    { id: 62, name: "Star", price: 1700, category: "Beer & Local Beverages", image: starBeerImg, inStock: true },
+    { id: 63, name: "Budweiser", price: 1700, category: "Beer & Local Beverages", image: budweiserImg, inStock: true },
+    { id: 64, name: "Ginger Champion", price: 1400, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 65, name: "Life", price: 1400, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 66, name: "Origin Beer", price: 1700, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 67, name: "Medium Legend", price: 1400, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 68, name: "Fayrous", price: 1200, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 69, name: "Double Black", price: 1400, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 70, name: "Small Ice", price: 1400, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 71, name: "Small Stout", price: 1400, category: "Beer & Local Beverages", image: guinnessImg, inStock: true },
+    { id: 72, name: "Big Heineken", price: 1700, category: "Beer & Local Beverages", image: heinekenImg, inStock: true },
+    { id: 73, name: "Medium Stout", price: 1400, category: "Beer & Local Beverages", image: guinnessImg, inStock: true },
+    { id: 74, name: "Champion Beer", price: 1400, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 75, name: "33 Beer", price: 1400, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 76, name: "Trophy Stout", price: 1400, category: "Beer & Local Beverages", image: guinnessImg, inStock: true },
+    { id: 77, name: "Tiger", price: 1400, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 78, name: "Hero", price: 1400, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 79, name: "Guinness Malt", price: 1400, category: "Beer & Local Beverages", image: guinnessImg, inStock: true },
+    { id: 80, name: "Smoot Stout", price: 1700, category: "Beer & Local Beverages", image: guinnessImg, inStock: true },
+    { id: 81, name: "Desperados", price: 1700, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 82, name: "Origin Better (S/S)", price: 1700, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 83, name: "Gulder", price: 1700, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 84, name: "Medium Heniken", price: 1400, category: "Beer & Local Beverages", image: heinekenImg, inStock: true },
+    { id: 85, name: "Bullet", price: 2500, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 86, name: "Fearless", price: 1000, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 87, name: "Climax Proof Beer", price: 1000, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 88, name: "Legend Twist", price: 1700, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 89, name: "Star Radler", price: 1400, category: "Beer & Local Beverages", image: starBeerImg, inStock: true },
+    { id: 90, name: "Big Legend", price: 2200, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 91, name: "Flying Fish/PamLyoske", price: 1400, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 92, name: "Exotic", price: 2500, category: "Beer & Local Beverages", image: genericBeerImg, inStock: true },
+    { id: 93, name: "Big Stout", price: 2200, category: "Beer & Local Beverages", image: guinnessImg, inStock: true },
+
+    // Soft Drinks & Non-Alcoholic
+    { id: 94, name: "Pet Pepsi", price: 500, category: "Soft Drinks & Non-Alcoholic", image: pepsiImg, inStock: true },
+    { id: 95, name: "Pet Coke", price: 500, category: "Soft Drinks & Non-Alcoholic", image: pepsiImg, inStock: true },
+    { id: 96, name: "Pet Amstel", price: 500, category: "Soft Drinks & Non-Alcoholic", image: genericBeerImg, inStock: true },
+    { id: 97, name: "Pet Teem Lemon", price: 500, category: "Soft Drinks & Non-Alcoholic", image: pepsiImg, inStock: true },
+    { id: 98, name: "Pet Spirit", price: 500, category: "Soft Drinks & Non-Alcoholic", image: pepsiImg, inStock: true },
+    { id: 99, name: "Pet Teem Soda", price: 500, category: "Soft Drinks & Non-Alcoholic", image: pepsiImg, inStock: true },
+    { id: 100, name: "Pet Mirinda Pineapple", price: 500, category: "Soft Drinks & Non-Alcoholic", image: pepsiImg, inStock: true },
+    { id: 101, name: "Schweppes", price: 1200, category: "Soft Drinks & Non-Alcoholic", image: pepsiImg, inStock: true },
+    { id: 102, name: "Hollandia Yogurt", price: 2500, category: "Soft Drinks & Non-Alcoholic", image: hollandiaImg, inStock: true },
+    { id: 103, name: "Monster", price: 2500, category: "Soft Drinks & Non-Alcoholic", image: monsterImg, inStock: true },
+
     // Water
     { id: 61, name: "Water", price: 500, category: "Water", image: waterImg, inStock: true },
   ];
 
   const categories = [
     { id: 'all', name: 'All Items' },
+    { id: 'Beer & Local Beverages', name: 'Beer & Local' },
+    { id: 'Soft Drinks & Non-Alcoholic', name: 'Soft Drinks' },
     { id: 'Whisky', name: 'Whisky' },
     { id: 'Cognac / Brandy / Irish', name: 'Cognac / Brandy' },
     { id: 'Vodka / Gin / Rum / Aperitif', name: 'Vodka / Gin / Rum' },
