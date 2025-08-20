@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Star } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Plus, Star, Search } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import menuImages from "@/components/MenuImageEdit";
 
 const Menu = () => {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const { addToCart } = useCart();
   const { toast } = useToast();
 
@@ -175,7 +177,7 @@ const Menu = () => {
       description: "Plain rice served with rich tomato stew",
       price: 5000,
       category: "dishes",
-      image: "/placeholder-food.jpg",
+      image: menuImages.riceAndStew,
       rating: 4.4,
       popular: false,
     },
@@ -185,7 +187,7 @@ const Menu = () => {
       description: "Plain white rice, perfect as a side dish",
       price: 1000,
       category: "dishes",
-      image: "/placeholder-food.jpg",
+      image: menuImages.whiteRice,
       rating: 4.2,
       popular: false,
     },
@@ -195,7 +197,7 @@ const Menu = () => {
       description: "Rich plantain porridge with vegetables and spices",
       price: 5000,
       category: "dishes",
-      image: "/placeholder-food.jpg",
+      image: menuImages.plantainPorridge,
       rating: 4.7,
       popular: true,
     },
@@ -205,7 +207,7 @@ const Menu = () => {
       description: "Hearty yam porridge with vegetables and meat",
       price: 5000,
       category: "dishes",
-      image: "/placeholder-food.jpg",
+      image: menuImages.yamPorridge,
       rating: 4.6,
       popular: false,
     },
@@ -215,7 +217,7 @@ const Menu = () => {
       description: "Traditional Nigerian delicacy with rich flavors",
       price: 5000,
       category: "dishes",
-      image: "/placeholder-food.jpg",
+      image: menuImages.ekpankukwu,
       rating: 4.5,
       popular: false,
     },
@@ -319,6 +321,57 @@ const Menu = () => {
       category: "chewable",
       image: "/placeholder-food.jpg",
       rating: 4.6,
+      popular: false,
+    },
+    // Shawarma items
+    {
+      id: 54,
+      name: "Shawarma Special",
+      description: "Our special shawarma with premium ingredients",
+      price: 5000,
+      category: "chewable",
+      image: menuImages.shawarmaSpecial,
+      rating: 4.8,
+      popular: true,
+    },
+    {
+      id: 55,
+      name: "Shawarma Chicken with Hotdog",
+      description: "Chicken shawarma served with hotdog",
+      price: 4000,
+      category: "chewable",
+      image: menuImages.shawarmaSpecial,
+      rating: 4.7,
+      popular: false,
+    },
+    {
+      id: 56,
+      name: "Shawarma Beef with Hotdog",
+      description: "Beef shawarma served with hotdog",
+      price: 3800,
+      category: "chewable",
+      image: menuImages.shawarmaBeef,
+      rating: 4.6,
+      popular: false,
+    },
+    {
+      id: 57,
+      name: "Shawarma Chicken without Hotdog",
+      description: "Chicken shawarma without hotdog",
+      price: 3500,
+      category: "chewable",
+      image: menuImages.shawarmaSpecial,
+      rating: 4.5,
+      popular: false,
+    },
+    {
+      id: 58,
+      name: "Shawarma Beef without Hotdog",
+      description: "Beef shawarma without hotdog",
+      price: 3500,
+      category: "chewable",
+      image: menuImages.shawarmaBeef,
+      rating: 4.5,
       popular: false,
     },
     // Coming Soon Items (no price)
@@ -491,9 +544,13 @@ const Menu = () => {
     },
   ];
 
-  const filteredItems = activeCategory === "all" 
-    ? menuItems 
-    : menuItems.filter(item => item.category === activeCategory);
+  const filteredItems = menuItems.filter(item => {
+    const matchesCategory = activeCategory === "all" || item.category === activeCategory;
+    const matchesSearch = searchQuery === "" || 
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
@@ -507,6 +564,20 @@ const Menu = () => {
             Discover our carefully crafted dishes made with the finest ingredients
             and traditional techniques passed down through generations.
           </p>
+        </div>
+
+        {/* Search Bar */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Input
+              type="text"
+              placeholder="Search menu items..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
         </div>
 
         {/* Category Filter */}

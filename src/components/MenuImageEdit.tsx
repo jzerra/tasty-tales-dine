@@ -63,13 +63,24 @@ export const menuImages = {
   meatPie: meatPieImg, // Keep this one
   chinChin: "/lovable-uploads/516c6f5f-d06e-492a-b9e0-3ade3c858d8c.png",
   samosa: meatPieImg, // Replace with actual samosa image
-  eggRoll: meatPieImg, // Replace with actual egg roll image
+  eggRoll: "/lovable-uploads/2ac03ceb-9e2c-4176-bd07-c4ca728fb208.png",
   panCake: meatPieImg, // Replace with actual pancake image
   doughnuts: meatPieImg, // Replace with actual doughnuts image
-  fishPie: meatPieImg, // Replace with actual fish pie image
+  fishPie: "/lovable-uploads/c1db4fd0-36a7-4953-87f6-00e44dbcc9c7.png",
   springRolls: meatPieImg, // Replace with actual spring rolls image
-  puffPuff: meatPieImg, // Replace with actual puff puff image
+  puffPuff: "/lovable-uploads/3b8f0831-f7f0-459d-957c-f2011db9627f.png",
   cupCake: meatPieImg, // Replace with actual cupcake image
+
+  // Additional dish images
+  ekpankukwu: "/lovable-uploads/28e45008-0349-42ff-8266-81ea25bf62f2.png",
+  yamPorridge: "/lovable-uploads/c310bede-3d41-48eb-9d73-6316ffd6fab1.png",
+  plantainPorridge: "/lovable-uploads/ae2bc79b-bc7c-469e-a05d-f49bbbb48092.png",
+  whiteRice: "/lovable-uploads/85186d8d-db29-4e5d-b9b9-06afb96195e0.png",
+  riceAndStew: "/lovable-uploads/a7ab89aa-fd1b-47a4-a002-37d8ce3cc4bc.png",
+
+  // Shawarma items
+  shawarmaSpecial: "/lovable-uploads/48aed98b-97cb-4df5-b97c-8d13e7f1f3a4.png",
+  shawarmaBeef: "/lovable-uploads/8792a49f-1901-4776-93f8-a385eb3a75f1.png",
 
   // Rice dishes
   friedRice: "/lovable-uploads/221f8004-06fe-4670-b3a9-673828a58c32.png",
