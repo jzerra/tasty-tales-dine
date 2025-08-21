@@ -470,16 +470,16 @@ const Menu = () => {
       popular: true,
     },
     // New Pastries
-    {
-      id: 47,
-      name: "Chicken Pie",
-      description: "Flaky pastry filled with seasoned chicken",
-      price: 1000,
-      category: "pastries",
-      image: "/placeholder-food.jpg",
-      rating: 4.7,
-      popular: false,
-    },
+     {
+       id: 47,
+       name: "Chicken Pie",
+       description: "Flaky pastry filled with seasoned chicken",
+       price: 1000,
+       category: "pastries",
+       image: menuImages.chickenPie,
+       rating: 4.7,
+       popular: false,
+     },
     {
       id: 48,
       name: "Ug's Special Jumbo Roll",

@@ -40,13 +40,13 @@ import grilledCatfishImg from "@/assets/grilled-catfish.jpg";
 // MENU IMAGE EXPORTS
 export const menuImages = {
   // Dishes
-  afangSoup: "/lovable-uploads/b50c7ee7-fe5d-40dc-b75c-fa32d5a99d36.png",
-  egusiSoup: "/lovable-uploads/e804b85c-9158-49fe-a2b1-aa99197c2003.png",
+  afangSoup: "/lovable-uploads/d8eca87f-4fa7-4885-8323-66378f2a7eef.png",
+  egusiSoup: "/lovable-uploads/c2e29279-3707-4377-94ba-ac2b8f083bba.png",
   fisherManSoup: "/lovable-uploads/e89cd784-5b1a-4145-a9fd-33e2ecd93acd.png",
   vegetableSoup: "/lovable-uploads/59043c54-7a35-4ca8-b935-59329723f552.png",
   bangaSoup: "/lovable-uploads/e16e4339-8f2c-446d-9d01-1c24e2063258.png",
-  whiteSoup: "/lovable-uploads/1a9ea0f3-8d1e-4cf9-afff-d767903a650c.png",
-  seafoodOkra: "/lovable-uploads/49a1dc0d-6042-47ea-8e6a-12188b11a478.png",
+  whiteSoup: "/lovable-uploads/f8e30aaa-5272-47ce-9af1-bf70c986c131.png",
+  seafoodOkra: "/lovable-uploads/13ba3aa2-6f48-4a89-bbe0-8f7998be5a52.png",
 
   // Chewable  
   goatMeatPepperSoup: "/lovable-uploads/21fcaa50-02ab-4f53-b217-ea65c4003480.png",
@@ -65,18 +65,19 @@ export const menuImages = {
   samosa: meatPieImg, // Replace with actual samosa image
   eggRoll: "/lovable-uploads/2ac03ceb-9e2c-4176-bd07-c4ca728fb208.png",
   panCake: meatPieImg, // Replace with actual pancake image
-  doughnuts: meatPieImg, // Replace with actual doughnuts image
+  doughnuts: "/lovable-uploads/0cee7435-2074-4ff0-bc22-20c21a69e8e4.png",
   fishPie: "/lovable-uploads/c1db4fd0-36a7-4953-87f6-00e44dbcc9c7.png",
   springRolls: meatPieImg, // Replace with actual spring rolls image
   puffPuff: "/lovable-uploads/3b8f0831-f7f0-459d-957c-f2011db9627f.png",
   cupCake: meatPieImg, // Replace with actual cupcake image
+  chickenPie: "/lovable-uploads/404a90e6-ccd0-4112-8315-f2e9c112640a.png",
 
   // Additional dish images
   ekpankukwu: "/lovable-uploads/28e45008-0349-42ff-8266-81ea25bf62f2.png",
-  yamPorridge: "/lovable-uploads/c310bede-3d41-48eb-9d73-6316ffd6fab1.png",
+  yamPorridge: "/lovable-uploads/fd6e116b-7755-42b0-8a03-8b6edcc1e1b4.png",
   plantainPorridge: "/lovable-uploads/ae2bc79b-bc7c-469e-a05d-f49bbbb48092.png",
   whiteRice: "/lovable-uploads/85186d8d-db29-4e5d-b9b9-06afb96195e0.png",
-  riceAndStew: "/lovable-uploads/a7ab89aa-fd1b-47a4-a002-37d8ce3cc4bc.png",
+  riceAndStew: "/lovable-uploads/07da37bf-ecc6-48c5-91c7-b9036eea3f52.png",
 
   // Shawarma items
   shawarmaSpecial: "/lovable-uploads/48aed98b-97cb-4df5-b97c-8d13e7f1f3a4.png",
