@@ -88,34 +88,34 @@ const Drinks = () => {
 
     // Wine (Still & Sparkling)
     { id: 40, name: "Four cousins", price: 8500, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
-    { id: 41, name: "Torley", price: 10000, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
+    { id: 41, name: "Torley", price: 10000, category: "Wine (Still & Sparkling)", image: "/lovable-uploads/7d21a2ab-7f78-4451-ac55-2821ad04877d.png", inStock: true },
     { id: 42, name: "Blue nun", price: 9000, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
     { id: 43, name: "Don royal", price: 6000, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
     { id: 44, name: "Leon del sol", price: 5500, category: "Wine (Still & Sparkling)", image: moetImg, inStock: false },
     { id: 45, name: "Cavatina", price: 8000, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
     { id: 46, name: "Friends and family", price: 10000, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
     { id: 47, name: "Red training", price: 12000, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
-    { id: 48, name: "Chamdor", price: 7800, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
-    { id: 49, name: "4 Street", price: 5900, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
+    { id: 48, name: "Chamdor", price: 7800, category: "Wine (Still & Sparkling)", image: "/lovable-uploads/b95f5ac3-672b-4fa4-99fb-ef746c4e924d.png", inStock: true },
+    { id: 49, name: "4th Street", price: 5900, category: "Wine (Still & Sparkling)", image: "/lovable-uploads/6687acd0-2b95-43d0-adfe-ed6c09935145.png", inStock: true },
     { id: 50, name: "Asconi Agor", price: 9500, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
     { id: 51, name: "Andre", price: 10500, category: "Wine (Still & Sparkling)", image: moetImg, inStock: true },
 
     // Champagne / Premium Sparkling
     { id: 52, name: "Moet", price: 135000, category: "Champagne / Premium Sparkling", image: moetImg, inStock: true },
-    { id: 53, name: "Belaire", price: 54200, category: "Champagne / Premium Sparkling", image: moetImg, inStock: true },
+    { id: 53, name: "Belaire", price: 54200, category: "Champagne / Premium Sparkling", image: "/lovable-uploads/fb7d9c67-c3f9-49e7-be89-d56b031512a2.png", inStock: true },
 
     // Tequila
-    { id: 54, name: "Casamicos", price: 105000, category: "Tequila", image: smirnoffImg, inStock: true },
+    { id: 54, name: "Casamigos", price: 105000, category: "Tequila", image: "/lovable-uploads/38bf0450-7b25-4acb-bad9-d8db4dfe1f32.png", inStock: true },
     { id: 55, name: "Don julio", price: 336000, category: "Tequila", image: smirnoffImg, inStock: false },
 
     // Bitters / Herbal
-    { id: 56, name: "Origin bitters", price: 6000, category: "Bitters / Herbal", image: smirnoffImg, inStock: true },
+    { id: 56, name: "Origin bitters", price: 6000, category: "Bitters / Herbal", image: "/lovable-uploads/7b152f4e-a4f7-4123-9f37-0ad5ed0b3e9c.png", inStock: true },
 
     // Others / To Verify
-    { id: 57, name: "Velvet", price: 17000, category: "Others / To Verify", image: smirnoffImg, inStock: true },
-    { id: 58, name: "Mausa", price: 12000, category: "Others / To Verify", image: smirnoffImg, inStock: true },
-    { id: 59, name: "Portal", price: 12000, category: "Others / To Verify", image: smirnoffImg, inStock: true },
-    { id: 60, name: "Small imperial", price: 1500, category: "Others / To Verify", image: smirnoffImg, inStock: true },
+    { id: 57, name: "Velvet", price: 17000, category: "Others / To Verify", image: "/lovable-uploads/0b6f73bc-5897-4d4a-9627-f67d1dfec427.png", inStock: true },
+    { id: 58, name: "Mausa", price: 12000, category: "Others / To Verify", image: "/lovable-uploads/2081214d-e456-4b0b-9dfe-dd94310cbe67.png", inStock: true },
+    { id: 59, name: "Portal", price: 12000, category: "Others / To Verify", image: "/lovable-uploads/e272a79a-e84d-4364-8386-7ce70a50437c.png", inStock: true },
+    { id: 60, name: "Small imperial", price: 1500, category: "Others / To Verify", image: "/lovable-uploads/2a30492e-a3cb-4f1f-9b0b-64012f773ca8.png", inStock: true },
 
     // Beer & Local Beverages
     { id: 62, name: "Star", price: 1700, category: "Beer & Local Beverages", image: starBeerImg, inStock: true },
