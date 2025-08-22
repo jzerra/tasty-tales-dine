@@ -317,88 +317,128 @@ const Drinks = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-7xl mx-auto">
             {activeCategory === 'all' ? (
-              // Show grouped by category
+              // Show grouped by category with restaurant-style layout
               Object.entries(groupedItems).map(([categoryName, items]) => (
                 <div key={categoryName} id={`category-${categoryName}`} className="mb-12">
                   <h2 className="text-2xl font-bold mb-6 text-primary">
                     {categoryName}
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  
+                  {/* Restaurant-style List Layout */}
+                  <div className="max-w-4xl space-y-3">
                     {items.map((item) => (
-                      <Card key={item.id} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                        <CardContent className="p-4">
-                          <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-gradient-to-br from-muted/20 to-muted/40">
+                      <div key={item.id} className="group bg-card hover:bg-accent/50 rounded-xl p-4 transition-all duration-300 border hover:border-primary/20">
+                        <div className="flex items-center gap-4">
+                          {/* Image */}
+                          <div className="relative flex-shrink-0">
                             <img
                               src={item.image}
                               alt={item.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              className="w-24 h-24 object-cover rounded-lg"
+                              onError={(e) => {
+                                e.currentTarget.src = "/placeholder-drink.jpg";
+                              }}
                             />
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="min-w-0 flex-1">
-                                <h3 className="font-semibold text-sm leading-tight group-hover:text-primary transition-colors">
-                                  {item.name}
-                                </h3>
-                                {item.sublabel && (
-                                  <p className="text-xs text-muted-foreground">{item.sublabel}</p>
-                                )}
+                            {!item.inStock && (
+                              <div className="absolute inset-0 bg-black/60 rounded-lg flex items-center justify-center">
+                                <Badge variant="destructive" className="text-xs">Out of Stock</Badge>
                               </div>
-                              {item.inStock === false && (
-                                <Badge variant="secondary" className="text-xs">
-                                  Out of Stock
-                                </Badge>
-                              )}
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="font-bold text-primary">
-                                ₦{item.price.toLocaleString()}
-                              </span>
+                            )}
+                          </div>
+                          
+                          {/* Content */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1">
+                                <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors">
+                                  {item.name}
+                                  {item.sublabel && (
+                                    <span className="text-muted-foreground text-sm ml-2 font-normal">
+                                      {item.sublabel}
+                                    </span>
+                                  )}
+                                </h3>
+                                <p className="text-muted-foreground text-sm mt-1">
+                                  Premium {categoryName.toLowerCase()} selection
+                                </p>
+                              </div>
+                              
+                              {/* Price and Action */}
+                              <div className="text-right flex-shrink-0">
+                                <div className="text-xl font-bold text-primary mb-2">₦{item.price.toLocaleString()}</div>
+                                <Button 
+                                  variant="default" 
+                                  size="sm" 
+                                  className="w-full min-w-[100px]"
+                                  disabled={!item.inStock}
+                                >
+                                  Add
+                                </Button>
+                              </div>
                             </div>
                           </div>
-                        </CardContent>
-                      </Card>
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </div>
               ))
             ) : (
-              // Show current category only
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              // Show current category only with restaurant-style layout
+              <div className="max-w-4xl mx-auto space-y-3">
                 {filteredAndSortedItems.map((item) => (
-                  <Card key={item.id} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <CardContent className="p-4">
-                      <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-gradient-to-br from-muted/20 to-muted/40">
+                  <div key={item.id} className="group bg-card hover:bg-accent/50 rounded-xl p-4 transition-all duration-300 border hover:border-primary/20">
+                    <div className="flex items-center gap-4">
+                      {/* Image */}
+                      <div className="relative flex-shrink-0">
                         <img
                           src={item.image}
                           alt={item.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-24 h-24 object-cover rounded-lg"
+                          onError={(e) => {
+                            e.currentTarget.src = "/placeholder-drink.jpg";
+                          }}
                         />
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="min-w-0 flex-1">
-                            <h3 className="font-semibold text-sm leading-tight group-hover:text-primary transition-colors">
-                              {item.name}
-                            </h3>
-                            {item.sublabel && (
-                              <p className="text-xs text-muted-foreground">{item.sublabel}</p>
-                            )}
+                        {!item.inStock && (
+                          <div className="absolute inset-0 bg-black/60 rounded-lg flex items-center justify-center">
+                            <Badge variant="destructive" className="text-xs">Out of Stock</Badge>
                           </div>
-                          {item.inStock === false && (
-                            <Badge variant="secondary" className="text-xs">
-                              Out of Stock
-                            </Badge>
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-primary">
-                            ₦{item.price.toLocaleString()}
-                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors">
+                              {item.name}
+                              {item.sublabel && (
+                                <span className="text-muted-foreground text-sm ml-2 font-normal">
+                                  {item.sublabel}
+                                </span>
+                              )}
+                            </h3>
+                            <p className="text-muted-foreground text-sm mt-1">
+                              Premium {item.category.toLowerCase()} selection
+                            </p>
+                          </div>
+                          
+                          {/* Price and Action */}
+                          <div className="text-right flex-shrink-0">
+                            <div className="text-xl font-bold text-primary mb-2">₦{item.price.toLocaleString()}</div>
+                            <Button 
+                              variant="default" 
+                              size="sm" 
+                              className="w-full min-w-[100px]"
+                              disabled={!item.inStock}
+                            >
+                              Add
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 ))}
               </div>
             )}

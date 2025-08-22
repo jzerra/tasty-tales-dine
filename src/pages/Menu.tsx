@@ -594,53 +594,66 @@ const Menu = () => {
           ))}
         </div>
 
-        {/* Menu Items Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Menu Items List */}
+        <div className="max-w-4xl mx-auto space-y-3">
           {filteredItems.map((item) => (
-            <Card key={item.id} className="group hover:shadow-warm transition-all duration-300 transform hover:scale-105">
-              <div className="relative">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-48 object-cover rounded-t-lg"
-                />
-                {item.popular && (
-                  <Badge className="absolute top-3 left-3 bg-gold text-gold-foreground">
-                    Popular
-                  </Badge>
-                )}
-                <div className="absolute top-3 right-3 bg-background/90 backdrop-blur rounded-full px-2 py-1 flex items-center gap-1">
-                  <Star className="h-3 w-3 fill-gold text-gold" />
-                  <span className="text-xs font-medium">{item.rating}</span>
+            <div key={item.id} className="group bg-card hover:bg-accent/50 rounded-xl p-4 transition-all duration-300 border hover:border-primary/20">
+              <div className="flex items-center gap-4">
+                {/* Image */}
+                <div className="relative flex-shrink-0">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-24 h-24 object-cover rounded-lg"
+                  />
+                  {item.popular && (
+                    <Badge className="absolute -top-2 -right-2 bg-gold text-gold-foreground text-xs px-2 py-1">
+                      Popular
+                    </Badge>
+                  )}
+                </div>
+                
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors">
+                        {item.name}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mt-1 line-clamp-2">
+                        {item.description}
+                      </p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-3 w-3 fill-gold text-gold" />
+                          <span className="text-xs text-muted-foreground">{item.rating}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Price and Action */}
+                    <div className="text-right flex-shrink-0">
+                      {item.comingSoon ? (
+                        <div className="text-sm font-medium text-muted-foreground mb-2">Coming Soon</div>
+                      ) : (
+                        <div className="text-xl font-bold text-primary mb-2">₦{item.price.toLocaleString()}</div>
+                      )}
+                      {!item.comingSoon && (
+                        <Button 
+                          variant="default" 
+                          size="sm" 
+                          className="w-full min-w-[100px]"
+                          onClick={() => handleAddToCart(item)}
+                        >
+                          <Plus className="h-4 w-4 mr-1" />
+                          Add
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <CardHeader>
-                <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                  {item.name}
-                </CardTitle>
-                <CardDescription>{item.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex justify-between items-center">
-                  {item.comingSoon ? (
-                    <span className="text-2xl font-bold text-muted-foreground">Coming Soon</span>
-                  ) : (
-                    <span className="text-2xl font-bold text-primary">₦{item.price.toLocaleString()}</span>
-                  )}
-                  {!item.comingSoon && (
-                    <Button 
-                      variant="hero" 
-                      size="sm" 
-                      className="group-hover:scale-110 transition-transform"
-                      onClick={() => handleAddToCart(item)}
-                    >
-                      <Plus className="h-4 w-4" />
-                      Add to Cart
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            </div>
           ))}
         </div>
 
