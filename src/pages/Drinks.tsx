@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Filter, ArrowUpDown, ArrowUp, ArrowDown, Wine, Sparkles } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { toast } from "@/hooks/use-toast";
 
 // Import drink images
 import blueLabelImg from "@/assets/blue-label-whisky.jpg";
@@ -39,6 +41,21 @@ const Drinks = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [showInStockOnly, setShowInStockOnly] = useState(true);
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (item: DrinkItem) => {
+    addToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.image,
+      category: item.category
+    });
+    toast({
+      title: "Added to cart",
+      description: `${item.name} has been added to your cart.`,
+    });
+  };
 
   const drinkItems: DrinkItem[] = [
     // Whisky
@@ -364,15 +381,16 @@ const Drinks = () => {
                               </div>
                               
                               {/* Price and Action */}
-                              <div className="text-right flex-shrink-0">
+                              <div className="flex flex-col items-end flex-shrink-0 min-w-[120px]">
                                 <div className="text-xl font-bold text-primary mb-2">₦{item.price.toLocaleString()}</div>
                                 <Button 
                                   variant="default" 
                                   size="sm" 
-                                  className="w-full min-w-[100px]"
+                                  className="w-full"
                                   disabled={!item.inStock}
+                                  onClick={() => handleAddToCart(item)}
                                 >
-                                  Add
+                                  Add to Cart
                                 </Button>
                               </div>
                             </div>
@@ -424,15 +442,16 @@ const Drinks = () => {
                           </div>
                           
                           {/* Price and Action */}
-                          <div className="text-right flex-shrink-0">
+                          <div className="flex flex-col items-end flex-shrink-0 min-w-[120px]">
                             <div className="text-xl font-bold text-primary mb-2">₦{item.price.toLocaleString()}</div>
                             <Button 
                               variant="default" 
                               size="sm" 
-                              className="w-full min-w-[100px]"
+                              className="w-full"
                               disabled={!item.inStock}
+                              onClick={() => handleAddToCart(item)}
                             >
-                              Add
+                              Add to Cart
                             </Button>
                           </div>
                         </div>
