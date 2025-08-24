@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Plus, Star, Search } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Plus, Star, Search, ChevronDown } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import menuImages from "@/components/MenuImageEdit";
@@ -38,78 +39,161 @@ const Menu = () => {
     { id: "drinks", name: "Drinks" },
   ];
 
-  const menuItems = [
-    // Dishes
+  const soupItems = [
     {
       id: 1,
       name: "Afang Soup",
       description: "Traditional Nigerian soup made with Afang leaves, meat and fish",
-      price: 5000,
       category: "dishes",
       image: menuImages.afangSoup,
       rating: 4.8,
       popular: true,
+      swallowOptions: [
+        { id: 101, name: "Afang & Garri", price: 5000 },
+        { id: 102, name: "Afang & Fufu", price: 5000 },
+        { id: 103, name: "Afang & Semovita", price: 5500 },
+        { id: 104, name: "Afang & Poundo", price: 5500 }
+      ]
     },
     {
       id: 2,
-      name: "Melon/Egusi Soup",
+      name: "Melon Soup (Egusi)",
       description: "Rich soup made with ground melon seeds and leafy vegetables",
-      price: 5000,
       category: "dishes",
       image: menuImages.egusiSoup,
       rating: 4.9,
       popular: true,
+      swallowOptions: [
+        { id: 201, name: "Egusi & Garri", price: 5000 },
+        { id: 202, name: "Egusi & Fufu", price: 5000 },
+        { id: 203, name: "Egusi & Semovita", price: 5500 },
+        { id: 204, name: "Egusi & Poundo", price: 5500 }
+      ]
     },
     {
       id: 3,
-      name: "Fisherman Soup",
-      description: "Fresh fish soup with native spices and vegetables",
-      price: 10000,
-      category: "dishes",
-      image: menuImages.fisherManSoup,
-      rating: 4.7,
-      popular: false,
-    },
-    {
-      id: 4,
       name: "Vegetable Soup",
       description: "Nutritious soup with assorted vegetables and meat",
-      price: 5000,
       category: "dishes",
       image: menuImages.vegetableSoup,
       rating: 4.6,
       popular: false,
+      swallowOptions: [
+        { id: 301, name: "Vegetable & Garri", price: 5000 },
+        { id: 302, name: "Vegetable & Fufu", price: 5000 },
+        { id: 303, name: "Vegetable & Semovita", price: 5500 },
+        { id: 304, name: "Vegetable & Poundo", price: 5500 }
+      ]
     },
     {
-      id: 5,
+      id: 4,
       name: "Banga Soup",
       description: "Palm nut soup with traditional spices and fresh fish",
-      price: 5000,
       category: "dishes",
       image: menuImages.bangaSoup,
       rating: 4.8,
       popular: true,
+      swallowOptions: [
+        { id: 401, name: "Banga & Garri", price: 5000 },
+        { id: 402, name: "Banga & Fufu", price: 5000 },
+        { id: 403, name: "Banga & Semovita", price: 5500 },
+        { id: 404, name: "Banga & Poundo", price: 5500 }
+      ]
+    },
+    {
+      id: 5,
+      name: "Okra Soup",
+      description: "Traditional okra soup with meat and fish",
+      category: "dishes",
+      image: "/placeholder-food.jpg",
+      rating: 4.7,
+      popular: false,
+      swallowOptions: [
+        { id: 501, name: "Okra & Garri", price: 5000 },
+        { id: 502, name: "Okra & Fufu", price: 5000 },
+        { id: 503, name: "Okra & Semovita", price: 5500 },
+        { id: 504, name: "Okra & Poundo", price: 5500 }
+      ]
     },
     {
       id: 6,
-      name: "White Soup",
+      name: "White Soup (Nsala)",
       description: "Traditional Igbo soup with native spices and meat",
-      price: 5000,
       category: "dishes",
       image: menuImages.whiteSoup,
       rating: 4.7,
       popular: false,
+      swallowOptions: [
+        { id: 601, name: "White Soup & Garri", price: 5000 },
+        { id: 602, name: "White Soup & Fufu", price: 5000 },
+        { id: 603, name: "White Soup & Semovita", price: 5500 },
+        { id: 604, name: "White Soup & Poundo", price: 5500 }
+      ]
     },
     {
       id: 7,
+      name: "Native Soup",
+      description: "Traditional native soup with local spices and ingredients",
+      category: "dishes",
+      image: menuImages.nativeSoup,
+      rating: 4.6,
+      popular: false,
+      swallowOptions: [
+        { id: 701, name: "Native & Garri", price: 5000 },
+        { id: 702, name: "Native & Fufu", price: 5000 },
+        { id: 703, name: "Native & Semovita", price: 5500 },
+        { id: 704, name: "Native & Poundo", price: 5500 }
+      ]
+    },
+    {
+      id: 8,
       name: "Seafood Okra",
       description: "Okra soup with fresh seafood and traditional spices",
-      price: 7000,
       category: "dishes",
       image: menuImages.seafoodOkra,
       rating: 4.9,
       popular: true,
+      swallowOptions: [
+        { id: 801, name: "Seafood Okra & Garri", price: 7000 },
+        { id: 802, name: "Seafood Okra & Fufu", price: 7000 },
+        { id: 803, name: "Seafood Okra & Semovita", price: 7500 },
+        { id: 804, name: "Seafood Okra & Poundo", price: 7500 }
+      ]
     },
+    {
+      id: 9,
+      name: "Fisherman Soup",
+      description: "Fresh fish soup with native spices and vegetables",
+      category: "dishes",
+      image: menuImages.fisherManSoup,
+      rating: 4.7,
+      popular: false,
+      swallowOptions: [
+        { id: 901, name: "Fisherman & Garri", price: 10000 },
+        { id: 902, name: "Fisherman & Fufu", price: 10000 },
+        { id: 903, name: "Fisherman & Semovita", price: 10500 },
+        { id: 904, name: "Fisherman & Poundo", price: 10500 }
+      ]
+    },
+    {
+      id: 10,
+      name: "Native Soup with Seafood",
+      description: "Traditional native soup enhanced with fresh seafood",
+      category: "dishes",
+      image: menuImages.nativeSoupSeafood,
+      rating: 4.8,
+      popular: true,
+      swallowOptions: [
+        { id: 1001, name: "Native + Seafood & Garri", price: 7000 },
+        { id: 1002, name: "Native + Seafood & Fufu", price: 7000 },
+        { id: 1003, name: "Native + Seafood & Semovita", price: 7500 },
+        { id: 1004, name: "Native + Seafood & Poundo", price: 7500 }
+      ]
+    }
+  ];
+
+  const menuItems = [
+    // Rice dishes
     {
       id: 31,
       name: "Fried Rice",
@@ -130,34 +214,14 @@ const Menu = () => {
       rating: 4.9,
       popular: true,
     },
-    // New Dishes
-    {
-      id: 33,
-      name: "Native Soup",
-      description: "Traditional native soup with local spices and ingredients",
-      price: 5000,
-      category: "dishes",
-      image: menuImages.nativeSoup,
-      rating: 4.6,
-      popular: false,
-    },
-    {
-      id: 34,
-      name: "Native Soup with Seafood",
-      description: "Traditional native soup enhanced with fresh seafood",
-      price: 7000,
-      category: "dishes",
-      image: menuImages.nativeSoupSeafood,
-      rating: 4.8,
-      popular: true,
-    },
+    // More rice dishes
     {
       id: 35,
       name: "Coconut Rice",
       description: "Aromatic rice cooked in creamy coconut milk",
       price: 5000,
       category: "dishes",
-      image: menuImages.coconutRice,
+      image: "/placeholder-food.jpg",
       rating: 4.7,
       popular: false,
     },
@@ -594,7 +658,83 @@ const Menu = () => {
           ))}
         </div>
 
-        {/* Menu Items List */}
+        {/* Special Soup Section with Swallow Options */}
+        {(activeCategory === "all" || activeCategory === "dishes") && (
+          <div className="max-w-4xl mx-auto mb-8">
+            <h2 className="text-2xl font-bold mb-4 text-center">Traditional Soups & Swallows</h2>
+            <div className="space-y-3">
+              {soupItems.map((soup) => (
+                <Card key={soup.id} className="overflow-hidden">
+                  <div className="flex items-start gap-4 p-4">
+                    {/* Image */}
+                    <div className="relative flex-shrink-0">
+                      <img
+                        src={soup.image}
+                        alt={soup.name}
+                        className="w-24 h-24 object-cover rounded-lg"
+                      />
+                      {soup.popular && (
+                        <Badge className="absolute -top-2 -right-2 bg-gold text-gold-foreground text-xs px-2 py-1">
+                          Popular
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between gap-4 mb-3">
+                        <div>
+                          <h3 className="font-bold text-lg text-foreground">{soup.name}</h3>
+                          <p className="text-muted-foreground text-sm mt-1">{soup.description}</p>
+                          <div className="flex items-center gap-1 mt-2">
+                            <Star className="h-3 w-3 fill-gold text-gold" />
+                            <span className="text-xs text-muted-foreground">{soup.rating}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Swallow Options Accordion */}
+                      <Accordion type="single" collapsible className="w-full">
+                        <AccordionItem value="swallows" className="border-none">
+                          <AccordionTrigger className="hover:no-underline py-2 text-sm font-medium text-primary">
+                            View Swallow Options & Prices
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2">
+                              {soup.swallowOptions.map((option) => (
+                                <div key={option.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                                  <span className="text-sm font-medium">{option.name}</span>
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-bold text-primary">₦{option.price.toLocaleString()}</span>
+                                    <Button 
+                                      variant="default" 
+                                      size="sm"
+                                      onClick={() => handleAddToCart({
+                                        id: option.id,
+                                        name: option.name,
+                                        price: option.price,
+                                        image: soup.image,
+                                        category: soup.category
+                                      })}
+                                    >
+                                      Add
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Regular Menu Items List */}
         <div className="max-w-4xl mx-auto space-y-3">
           {filteredItems.map((item) => (
             <div key={item.id} className="group bg-card hover:bg-accent/50 rounded-xl p-4 transition-all duration-300 border hover:border-primary/20">
