@@ -219,9 +219,8 @@ const Index = () => {
                       <img src={dish.image} alt={dish.name} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1">
-                      <div className="flex items-center justify-between mb-1">
+                      <div className="mb-1">
                         <h4 className="font-semibold group-hover:text-primary transition-colors">{dish.name}</h4>
-                        <span className="font-bold text-primary">₦{dish.price.toLocaleString()}</span>
                       </div>
                       <p className="text-sm text-muted-foreground">{dish.description}</p>
                     </div>
