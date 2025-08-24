@@ -343,7 +343,7 @@ const Index = () => {
                       </div>
                       <div>
                         <h4 className="font-semibold mb-1">Location</h4>
-                        <p className="text-muted-foreground">123 Wellington Bassey Avenue<br />Uyo, Akwa Ibom State</p>
+                        <p className="text-muted-foreground">19 Apostolic Road, Osongama<br />Uyo, Akwa Ibom State</p>
                       </div>
                     </div>
                     
