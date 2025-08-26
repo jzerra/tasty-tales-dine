@@ -1,5 +1,5 @@
 // Paystack integration
-export const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_your_public_key_here';
+export const PAYSTACK_PUBLIC_KEY = 'pk_test_your_paystack_public_key_here';
 
 export interface PaystackConfig {
   reference: string;

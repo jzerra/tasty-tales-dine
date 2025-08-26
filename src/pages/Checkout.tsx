@@ -75,43 +75,16 @@ const Checkout = () => {
 
   const createOrder = async () => {
     try {
-      // Create customer first
-      const { data: customer, error: customerError } = await supabase
-        .from('customers')
-        .upsert({
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          phone: formData.phone
-        }, { 
-          onConflict: 'email',
-          ignoreDuplicates: false 
-        })
-        .select()
-        .single();
-
-      if (customerError && customerError.code !== '23505') {
-        throw customerError;
-      }
-
-      // Create order
+      // Create order directly (matching your current schema)
       const orderData = {
-        customer_id: customer?.id || null,
         customer_name: `${formData.firstName} ${formData.lastName}`,
         customer_phone: formData.phone,
         customer_email: formData.email,
         delivery_address: orderType === 'delivery' ? 
-          `${formData.address}, ${formData.city}, ${formData.state}` : null,
-        order_type: orderType,
-        payment_method: paymentMethod,
-        payment_status: paymentMethod === 'cash' ? 'pending' : 'pending',
-        order_status: 'pending',
-        subtotal,
-        delivery_fee: deliveryFee,
-        tax,
-        total,
-        delivery_instructions: formData.instructions || null,
-        paystack_reference: paymentMethod === 'card' ? generateReference() : null
+          `${formData.address}, ${formData.city}, ${formData.state}` : '',
+        payment_status: 'pending',
+        payment_reference: paymentMethod === 'card' ? generateReference() : null,
+        total_amount: total
       };
 
       const { data: order, error: orderError } = await supabase
@@ -122,15 +95,12 @@ const Checkout = () => {
 
       if (orderError) throw orderError;
 
-      // Create order items
+      // Create order items (matching your current schema)
       const orderItems = cartState.items.map(item => ({
         order_id: order.id,
-        product_id: item.id,
-        product_name: item.name,
-        product_price: item.price,
-        product_image: item.image,
+        menu_item_id: item.id,
         quantity: item.quantity,
-        subtotal: item.price * item.quantity
+        price: item.price
       }));
 
       const { error: itemsError } = await supabase
@@ -157,9 +127,9 @@ const Checkout = () => {
       if (paymentMethod === 'card') {
         // Initialize Paystack payment
         await initializePaystackPayment({
-          reference: order.paystack_reference!,
+          reference: order.payment_reference!,
           email: formData.email,
-          amount: total * 100, // Convert to kobo
+          amount: total, // Amount in kobo (Paystack expects this)
           publicKey: '', // Will be set in paystack.ts
           callback: async (response: any) => {
             if (response.status === 'success') {
@@ -171,7 +141,7 @@ const Checkout = () => {
               
               toast({
                 title: "Payment successful!",
-                description: `Order ${order.id} has been placed successfully.`,
+                description: `Order has been placed successfully.`,
               });
               
               clearCart();
