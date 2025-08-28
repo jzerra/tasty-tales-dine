@@ -12,6 +12,7 @@ import Drinks from "./pages/Drinks";
 import Checkout from "./pages/Checkout";
 import Reservations from "./pages/Reservations";
 import Admin from "./pages/Admin";
+import PaystackKeySetup from "./components/PaystackKeySetup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/reservations" element={<Reservations />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/paystack-setup" element={<PaystackKeySetup />} />
             <Route path="/contact" element={<Index />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
