@@ -1,5 +1,5 @@
 // Paystack integration
-export const PAYSTACK_PUBLIC_KEY = 'pk_test_your_paystack_public_key_here';
+export const PAYSTACK_PUBLIC_KEY = 'pk_test_927a438781acc35e92919bb5503def9dcc2dc9b0';
 
 export interface PaystackConfig {
   reference: string;
