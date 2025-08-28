@@ -1,4 +1,5 @@
 // Paystack integration
+// Replace this with your own Paystack publishable key from your dashboard
 export const PAYSTACK_PUBLIC_KEY = 'pk_test_927a438781acc35e92919bb5503def9dcc2dc9b0';
 
 export interface PaystackConfig {
