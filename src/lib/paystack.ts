@@ -51,10 +51,10 @@ export async function initializePaystackPayment(config: PaystackConfig) {
   }
 
   const handler = window.PaystackPop.setup({
-    reference: config.reference,
+    ref: config.reference,
     email: config.email,
     amount: config.amount,
-    public_key: PAYSTACK_PUBLIC_KEY,
+    key: PAYSTACK_PUBLIC_KEY,
     callback: function(response: any) {
       config.callback(response);
     },
