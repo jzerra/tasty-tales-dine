@@ -9,8 +9,8 @@ export interface PaystackConfig {
   text?: string;
   currency?: string;
   channels?: string[];
-  callback?: (response: any) => void;
-  close?: () => void;
+  callback: (response: any) => void;
+  onClose: () => void;
 }
 
 declare global {
@@ -52,6 +52,8 @@ export async function initializePaystackPayment(config: PaystackConfig) {
   const handler = window.PaystackPop.setup({
     ...config,
     publicKey: PAYSTACK_PUBLIC_KEY,
+    callback: config.callback,
+    onClose: config.onClose,
   });
 
   handler.openIframe();

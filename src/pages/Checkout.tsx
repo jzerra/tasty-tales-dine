@@ -148,7 +148,7 @@ const Checkout = () => {
               navigate('/');
             }
           },
-          close: () => {
+          onClose: () => {
             setLoading(false);
           }
         });
