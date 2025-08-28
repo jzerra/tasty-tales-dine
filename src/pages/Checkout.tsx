@@ -75,7 +75,7 @@ const Checkout = () => {
 
   const createOrder = async () => {
     try {
-      // Create order directly (matching your current schema)
+      // Create order directly - let database auto-generate UUID for id
       const orderData = {
         customer_name: `${formData.firstName} ${formData.lastName}`,
         customer_phone: formData.phone,
@@ -95,10 +95,10 @@ const Checkout = () => {
 
       if (orderError) throw orderError;
 
-      // Create order items (matching your current schema)
+      // Create order items - let database auto-generate UUID for id, convert menu_item_id to string
       const orderItems = cartState.items.map(item => ({
         order_id: order.id,
-        menu_item_id: item.id,
+        menu_item_id: item.id.toString(), // Convert integer ID to string for database
         quantity: item.quantity,
         price: item.price
       }));
