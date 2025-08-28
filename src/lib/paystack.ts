@@ -16,7 +16,7 @@ export interface PaystackConfig {
 declare global {
   interface Window {
     PaystackPop?: {
-      setup: (config: PaystackConfig) => {
+      setup: (config: any) => {
         openIframe: () => void;
       };
     };
@@ -50,10 +50,16 @@ export async function initializePaystackPayment(config: PaystackConfig) {
   }
 
   const handler = window.PaystackPop.setup({
-    ...config,
-    publicKey: PAYSTACK_PUBLIC_KEY,
-    callback: config.callback,
-    onClose: config.onClose,
+    reference: config.reference,
+    email: config.email,
+    amount: config.amount,
+    public_key: PAYSTACK_PUBLIC_KEY,
+    callback: function(response: any) {
+      config.callback(response);
+    },
+    onClose: function() {
+      config.onClose();
+    }
   });
 
   handler.openIframe();
