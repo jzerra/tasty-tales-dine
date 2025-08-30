@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   CheckCircle, 
   Clock, 
@@ -13,17 +18,42 @@ import {
   Truck,
   MapPin,
   Loader2,
-  LogOut
+  LogOut,
+  Plus,
+  Edit,
+  Trash2,
+  UtensilsCrossed
 } from "lucide-react";
 import { supabase, Order, Reservation } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import AdminAuth from "@/components/AdminAuth";
 
+interface MenuItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  image_url: string;
+  is_available: boolean;
+}
+
 const Admin = () => {
   const [orders, setOrders] = useState<(Order & { items: string[] })[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [menuFormOpen, setMenuFormOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
+  const [menuFormData, setMenuFormData] = useState({
+    name: '',
+    description: '',
+    price: '',
+    category: '',
+    image_url: '',
+    is_available: true
+  });
   const { signOut } = useAuth();
   const { toast } = useToast();
 
@@ -84,10 +114,30 @@ const Admin = () => {
     }
   };
 
+  const fetchMenuItems = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('menu_items')
+        .select('*')
+        .order('category', { ascending: true })
+        .order('name', { ascending: true });
+
+      if (error) throw error;
+      setMenuItems(data || []);
+    } catch (error: any) {
+      console.error('Error fetching menu items:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load menu items",
+        variant: "destructive"
+      });
+    }
+  };
+
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      await Promise.all([fetchOrders(), fetchReservations()]);
+      await Promise.all([fetchOrders(), fetchReservations(), fetchMenuItems()]);
       setLoading(false);
     };
 
@@ -110,9 +160,18 @@ const Admin = () => {
       )
       .subscribe();
 
+    const menuSubscription = supabase
+      .channel('menu_items')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'menu_items' },
+        () => fetchMenuItems()
+      )
+      .subscribe();
+
     return () => {
       ordersSubscription.unsubscribe();
       reservationsSubscription.unsubscribe();
+      menuSubscription.unsubscribe();
     };
   }, []);
 
@@ -163,6 +222,122 @@ const Admin = () => {
       toast({
         title: "Error",
         description: "Failed to update reservation status",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleMenuFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const menuData = {
+        name: menuFormData.name,
+        description: menuFormData.description,
+        price: parseFloat(menuFormData.price),
+        category: menuFormData.category,
+        image_url: menuFormData.image_url,
+        is_available: menuFormData.is_available
+      };
+
+      if (editingItem) {
+        const { error } = await supabase
+          .from('menu_items')
+          .update(menuData)
+          .eq('id', editingItem.id);
+
+        if (error) throw error;
+
+        toast({
+          title: "Menu item updated",
+          description: "Menu item has been successfully updated",
+        });
+      } else {
+        const { error } = await supabase
+          .from('menu_items')
+          .insert([menuData]);
+
+        if (error) throw error;
+
+        toast({
+          title: "Menu item added",
+          description: "New menu item has been successfully added",
+        });
+      }
+
+      setMenuFormOpen(false);
+      setEditingItem(null);
+      setMenuFormData({
+        name: '',
+        description: '',
+        price: '',
+        category: '',
+        image_url: '',
+        is_available: true
+      });
+      fetchMenuItems();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: editingItem ? "Failed to update menu item" : "Failed to add menu item",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleEditMenuItem = (item: MenuItem) => {
+    setEditingItem(item);
+    setMenuFormData({
+      name: item.name,
+      description: item.description,
+      price: item.price.toString(),
+      category: item.category,
+      image_url: item.image_url,
+      is_available: item.is_available
+    });
+    setMenuFormOpen(true);
+  };
+
+  const handleDeleteMenuItem = async (itemId: string) => {
+    try {
+      const { error } = await supabase
+        .from('menu_items')
+        .delete()
+        .eq('id', itemId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Menu item deleted",
+        description: "Menu item has been successfully deleted",
+      });
+      fetchMenuItems();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to delete menu item",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const toggleMenuItemAvailability = async (itemId: string, isAvailable: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('menu_items')
+        .update({ is_available: !isAvailable })
+        .eq('id', itemId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Menu item updated",
+        description: `Menu item is now ${!isAvailable ? 'available' : 'unavailable'}`,
+      });
+      fetchMenuItems();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to update menu item",
         variant: "destructive"
       });
     }
@@ -281,9 +456,10 @@ const Admin = () => {
 
           {/* Main Content */}
           <Tabs defaultValue="orders" className="space-y-6">
-            <TabsList className="grid w-full lg:w-400 grid-cols-2">
+            <TabsList className="grid w-full lg:w-600 grid-cols-3">
               <TabsTrigger value="orders">Orders Management</TabsTrigger>
               <TabsTrigger value="reservations">Reservations</TabsTrigger>
+              <TabsTrigger value="menu">Menu Management</TabsTrigger>
             </TabsList>
 
             {/* Orders Tab */}
@@ -417,6 +593,167 @@ const Admin = () => {
                             </Button>
                           </div>
                         )}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Menu Management Tab */}
+            <TabsContent value="menu" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle>Menu Management</CardTitle>
+                      <CardDescription>Add, edit, and manage menu items</CardDescription>
+                    </div>
+                    <Dialog open={menuFormOpen} onOpenChange={setMenuFormOpen}>
+                      <DialogTrigger asChild>
+                        <Button onClick={() => {
+                          setEditingItem(null);
+                          setMenuFormData({
+                            name: '',
+                            description: '',
+                            price: '',
+                            category: '',
+                            image_url: '',
+                            is_available: true
+                          });
+                        }}>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Menu Item
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[525px]">
+                        <form onSubmit={handleMenuFormSubmit}>
+                          <DialogHeader>
+                            <DialogTitle>{editingItem ? 'Edit Menu Item' : 'Add New Menu Item'}</DialogTitle>
+                            <DialogDescription>
+                              {editingItem ? 'Update the menu item details below.' : 'Fill in the details for the new menu item.'}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="name" className="text-right">Name</Label>
+                              <Input
+                                id="name"
+                                value={menuFormData.name}
+                                onChange={(e) => setMenuFormData(prev => ({ ...prev, name: e.target.value }))}
+                                className="col-span-3"
+                                required
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="price" className="text-right">Price</Label>
+                              <Input
+                                id="price"
+                                type="number"
+                                step="0.01"
+                                value={menuFormData.price}
+                                onChange={(e) => setMenuFormData(prev => ({ ...prev, price: e.target.value }))}
+                                className="col-span-3"
+                                required
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="category" className="text-right">Category</Label>
+                              <Select
+                                value={menuFormData.category}
+                                onValueChange={(value) => setMenuFormData(prev => ({ ...prev, category: value }))}
+                              >
+                                <SelectTrigger className="col-span-3">
+                                  <SelectValue placeholder="Select category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="appetizers">Appetizers</SelectItem>
+                                  <SelectItem value="main-course">Main Course</SelectItem>
+                                  <SelectItem value="sides">Sides</SelectItem>
+                                  <SelectItem value="desserts">Desserts</SelectItem>
+                                  <SelectItem value="beverages">Beverages</SelectItem>
+                                  <SelectItem value="special">Special</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="image_url" className="text-right">Image URL</Label>
+                              <Input
+                                id="image_url"
+                                value={menuFormData.image_url}
+                                onChange={(e) => setMenuFormData(prev => ({ ...prev, image_url: e.target.value }))}
+                                className="col-span-3"
+                                placeholder="https://example.com/image.jpg"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-start gap-4">
+                              <Label htmlFor="description" className="text-right">Description</Label>
+                              <Textarea
+                                id="description"
+                                value={menuFormData.description}
+                                onChange={(e) => setMenuFormData(prev => ({ ...prev, description: e.target.value }))}
+                                className="col-span-3"
+                                rows={3}
+                              />
+                            </div>
+                          </div>
+                          <DialogFooter>
+                            <Button type="submit">{editingItem ? 'Update' : 'Add'} Menu Item</Button>
+                          </DialogFooter>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {menuItems.map((item) => (
+                      <div key={item.id} className="border rounded-lg p-4 space-y-3">
+                        <div className="flex justify-between items-start">
+                          <div className="flex gap-4">
+                            {item.image_url && (
+                              <img 
+                                src={item.image_url} 
+                                alt={item.name}
+                                className="w-16 h-16 object-cover rounded-lg"
+                              />
+                            )}
+                            <div>
+                              <div className="flex items-center gap-2 mb-2">
+                                <h3 className="font-semibold">{item.name}</h3>
+                                <Badge variant={item.is_available ? "default" : "secondary"}>
+                                  {item.is_available ? "Available" : "Unavailable"}
+                                </Badge>
+                                <Badge variant="outline">{item.category}</Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-1">{item.description}</p>
+                              <p className="text-lg font-bold text-primary">₦{item.price.toLocaleString()}</p>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => toggleMenuItemAvailability(item.id, item.is_available)}
+                            >
+                              <UtensilsCrossed className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleEditMenuItem(item)}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleDeleteMenuItem(item.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
